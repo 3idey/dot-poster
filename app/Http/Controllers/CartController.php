@@ -10,12 +10,13 @@ class CartController extends Controller
 {
     public function index()
     {
+
         $items = auth()->user()
             ->cartItems()
-            ->with(['product.images' => fn($q) => $q->orderByDesc('is_main')])
+            ->with(['product.images' => fn ($q) => $q->orderByDesc('is_main')])
             ->get();
 
-        $total = $items->sum(fn($i) => $i->quantity * $i->product->price);
+        $total = $items->sum(fn ($i) => $i->quantity * $i->product->price);
 
         return view('cart.index', compact('items', 'total'));
     }
@@ -43,7 +44,8 @@ class CartController extends Controller
 
     public function update(Request $request, CartItem $item)
     {
-        $this->authorize('update', $item); // optional policy
+        $this->authorize('update', $item);
+
         $data = $request->validate(['quantity' => ['required', 'integer', 'min:1']]);
         $item->update(['quantity' => $data['quantity']]);
 
@@ -52,7 +54,9 @@ class CartController extends Controller
 
     public function destroy(CartItem $item)
     {
-        $this->authorize('delete', $item); // optional policy
+
+        $this->authorize('delete', $item);
+
         $item->delete();
 
         return back()->with('success', 'Removed from cart');

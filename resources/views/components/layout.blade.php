@@ -6,13 +6,30 @@
             <!-- Logo -->
             <a href="/" class="flex items-center space-x-3 px-4 mb-6 ">
                 <img src="{{ \Illuminate\Support\Facades\Vite::asset('resources/images/whitelogo.png') }}" alt="logo"
-                    class="w-55 h-55 object-cover  hover:scale-115 transition-transform duration-300 ease-in-out">
+                    class="w-[55px] h-[55px] object-cover hover:scale-110 transition-transform duration-300 ease-in-out">
             </a>
 
             <!-- Navigation Links -->
             <ul class="w-full px-6 space-y-4 mb-6">
                 <li><x-sidelink link="/">Home</x-sidelink></li>
-                <li><x-sidelink link="#">Posters</x-sidelink></li>
+                <li><x-sidelink link="{{ route('products.index') }}">Posters</x-sidelink></li>
+                @auth
+                    <li class="relative">
+                        <x-sidelink link="{{ route('cart.index') }}">
+                            Cart
+                            @if (auth()->user()->cartItems()->count() > 0)
+                                <span class="ml-2 bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                                    {{ auth()->user()->cartItems()->count() }}
+                                </span>
+                            @endif
+                        </x-sidelink>
+                    </li>
+                @endauth
+                @guest
+                    <li>
+                        <x-sidelink link="{{ route('login') }}">Cart</x-sidelink>
+                    </li>
+                @endguest
                 <li><x-sidelink link="#">Contact</x-sidelink></li>
                 <li><x-sidelink link="/about">About</x-sidelink></li>
 
@@ -29,7 +46,7 @@
                         </button>
                     </form>
                 @else
-                    <div class="ml-4 flex space-between space-x-6">
+                    <div class="ml-4 flex justify-between space-x-6">
                         <x-button name="Login" href="/login" />
                         <x-button name="Register" href="/register" />
                     </div>
@@ -38,8 +55,10 @@
 
         </nav>
 
-        {{ $slot ?? '' }}
-
+        <!-- Main content wrapper ensures content isn't hidden behind fixed sidebar -->
+        <main class="flex-1 ml-64 p-10 overflow-y-auto w-full">
+            {{ $slot ?? '' }}
+        </main>
 
     </div>
 </body>
