@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
             $table->integer('stock')->default(0); //  quantity of items in stock
-            $table->boolean('is_active')->default(true); //  whether the product is active or not
+            $table->boolean('status')->default(true); //  whether the product is active or not
             $table->timestamps();
         });
     }
