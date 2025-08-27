@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -11,6 +10,7 @@ class RegisterController extends Controller
     {
         return view('auth.register');
     }
+
     public function store()
     {
         $attributes = request()->validate([

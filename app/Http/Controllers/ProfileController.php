@@ -15,10 +15,12 @@ class ProfileController extends Controller
     {
         return view('profile.show');
     }
+
     public function edit()
     {
         return view('profile.edit');
     }
+
     public function create()
     {
         return view('profile.create');
@@ -27,7 +29,6 @@ class ProfileController extends Controller
     /**
      * Update the user's profile.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request)

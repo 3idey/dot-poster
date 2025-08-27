@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
-use App\Models\Category;
+use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
 {
@@ -28,8 +27,8 @@ class ProductSeeder extends Seeder
                 for ($i = 0; $i < $count; $i++) {
                     ProductImage::create([
                         'product_id' => $product->id,
-                        'image_url'  => "https://picsum.photos/seed/{$product->id}-{$i}/800/1000",
-                        'is_main'    => $i === 0,
+                        'image_url' => "https://picsum.photos/seed/{$product->id}-{$i}/800/1000",
+                        'is_main' => $i === 0,
                     ]);
                 }
             });
