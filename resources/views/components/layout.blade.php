@@ -24,6 +24,9 @@
                             @endif
                         </x-sidelink>
                     </li>
+                    <li>
+                        <x-sidelink link="{{ route('profile.show') }}">profile</x-sidelink>
+                    </li>
                 @endauth
                 @guest
                     <li>
