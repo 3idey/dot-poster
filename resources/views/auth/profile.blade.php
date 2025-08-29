@@ -6,8 +6,11 @@
         {{-- User Info + Edit --}}
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-6">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=0D8ABC&color=fff"
-                    class="w-20 h-20 rounded-full shadow-lg" alt="avatar">
+                <img src="{{ $user->avatar
+                    ? asset('storage/' . $user->avatar)
+                    : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}"
+                    class="w-20 h-20 rounded-full border-2 border-blue-500 shadow-lg" alt="avatar">
+
 
                 <div>
                     <h2 class="text-2xl font-bold">{{ $user->name }}</h2>

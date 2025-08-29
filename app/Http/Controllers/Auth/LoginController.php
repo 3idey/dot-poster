@@ -24,7 +24,7 @@ class LoginController extends Controller
             'password' => ['required', 'min:6', 'max:254'],
         ]);
 
-        $field = filter_var($attributes['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
+        $field = filter_var($attributes['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
 
         if (! Auth::attempt([
             $field => $attributes['login'],

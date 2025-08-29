@@ -3,7 +3,7 @@
     <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-lg">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Edit Profile</h1>
 
-        <form action="{{ route('profile.update') }}" method="POST" class="space-y-5">
+        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
             @csrf
             @method('PUT')
 
@@ -48,6 +48,15 @@
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
+            <div>
+                <label class="block text-sm">Profile Picture</label>
+                <input type="file" name="avatar" accept="image/*"
+                    class="w-full px-3 py-2 rounded-lg bg-gray-700 text-white">
+                @error('avatar')
+                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
+            </div>
+
 
             <!-- Current Password -->
             <div class="pt-4 border-t border-gray-300">

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
@@ -13,11 +13,12 @@ class CheckoutController extends Controller
     {
         $this->middleware('auth');
     }
+
     public function index(Request $request)
     {
         $user = $request->user();
         $items = $user->cartItems()->with('product')->get();
-        $total = $items->sum(fn($i) => $i->quantity * $i->product->price);
+        $total = $items->sum(fn ($i) => $i->quantity * $i->product->price);
 
         return view('checkout.index', compact('items', 'total', 'user'));
     }
@@ -29,7 +30,7 @@ class CheckoutController extends Controller
         abort_if($items->isEmpty(), 400, 'Cart is empty');
 
         DB::transaction(function () use ($user, $items) {
-            $total = $items->sum(fn($i) => $i->quantity * $i->product->price);
+            $total = $items->sum(fn ($i) => $i->quantity * $i->product->price);
 
             $order = Order::create([
                 'user_id' => $user->id,
