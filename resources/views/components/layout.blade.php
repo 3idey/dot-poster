@@ -1,4 +1,4 @@
-<body class="bg-gray-50 text-gray-900 font-sans antialiased">
+<body class="bg-gray-900 text-white font-sans antialiased">
     <div class="flex h-screen">
         <!-- Sidebar -->
         <nav
