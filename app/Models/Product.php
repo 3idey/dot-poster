@@ -21,16 +21,36 @@ class Product extends Model
         'stock',
         'status',
     ];
+
     protected static function booted()
     {
         static::creating(function ($product) {
-            $product->slug = Str::slug($product->name);
+            // Generate a unique slug on create
+            $base = Str::slug($product->name) ?: Str::random(8);
+            $slug = $base;
+            $i = 1;
+            while (static::where('slug', $slug)->exists()) {
+                $slug = $base . '-' . $i;
+                $i++;
+            }
+            $product->slug = $slug;
         });
 
         static::updating(function ($product) {
-            $product->slug = Str::slug($product->name);
+            // Only adjust slug if the name changed
+            if ($product->isDirty('name')) {
+                $base = Str::slug($product->name) ?: Str::random(8);
+                $slug = $base;
+                $i = 1;
+                while (static::where('slug', $slug)->where('id', '!=', $product->id)->exists()) {
+                    $slug = $base . '-' . $i;
+                    $i++;
+                }
+                $product->slug = $slug;
+            }
         });
     }
+
     public function category()
     {
         return $this->belongsTo(Category::class);

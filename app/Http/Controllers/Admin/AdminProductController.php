@@ -32,18 +32,8 @@ class AdminProductController extends Controller
             'description' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
         ]);
-        $slug = Str::slug($validated['name']);
-        $originalSlug = $slug;
-        $count = 1;
 
-        // Keep looping until we find a free slug
-        while (\App\Models\Product::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $count;
-            $count++;
-        }
-
-        $validated['slug'] = $slug;
-
+        // Slug will be generated uniquely in the Product model events
         Product::create($validated);
 
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');

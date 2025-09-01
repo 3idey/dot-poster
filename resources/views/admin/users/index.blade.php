@@ -19,9 +19,9 @@
                     <td class="p-3">{{ $user->id }}</td>
                     <td class="p-3">{{ $user->name }}</td>
                     <td class="p-3">{{ $user->email }}</td>
-                    <td class="p-3">{{ $user->status }}</td>
+                    <td class="p-3">{{ $user->is_banned ? 'banned' : 'active' }}</td>
                     <td class="p-3 space-x-2">
-                        @if ($user->status !== 'banned')
+                        @if (!$user->is_banned)
                             <form action="{{ route('admin.users.ban', $user) }}" method="POST" class="inline">
                                 @csrf
                                 @method('PATCH')

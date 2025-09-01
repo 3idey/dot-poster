@@ -19,13 +19,13 @@ class AdminUserController extends Controller
 
     public function ban(User $user)
     {
-        $user->update(['status' => 'banned']);
+        $user->update(['is_banned' => true]);
         return back()->with('success', 'User banned.');
     }
 
     public function unban(User $user)
     {
-        $user->update(['status' => 'active']);
+        $user->update(['is_banned' => false]);
         return back()->with('success', 'User unbanned.');
     }
     /**

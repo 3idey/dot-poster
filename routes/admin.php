@@ -15,8 +15,8 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
 
     // Users
     Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
-    Route::patch('users/{user}/ban', [AdminUserController::class, 'ban'])->name('users.ban');
-    Route::patch('users/{user}/unban', [AdminUserController::class, 'unban'])->name('users.unban');
+    Route::match(['PATCH', 'POST'], 'users/{user}/ban', [AdminUserController::class, 'ban'])->name('users.ban');
+    Route::match(['PATCH', 'POST'], 'users/{user}/unban', [AdminUserController::class, 'unban'])->name('users.unban');
     Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
 
     // Orders
