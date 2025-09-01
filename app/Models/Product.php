@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
     use HasFactory, Notifiable;
+
 
     protected $fillable = [
         'name',
@@ -19,7 +21,16 @@ class Product extends Model
         'stock',
         'status',
     ];
+    protected static function booted()
+    {
+        static::creating(function ($product) {
+            $product->slug = Str::slug($product->name);
+        });
 
+        static::updating(function ($product) {
+            $product->slug = Str::slug($product->name);
+        });
+    }
     public function category()
     {
         return $this->belongsTo(Category::class);

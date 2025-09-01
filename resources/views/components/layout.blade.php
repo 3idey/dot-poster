@@ -24,10 +24,16 @@
                             @endif
                         </x-sidelink>
                     </li>
-                    <li>
-                        <x-sidelink link="{{ route('profile.show') }}">profile</x-sidelink>
-                    </li>
+
+                    {{-- Normal user links --}}
+                    <li><x-sidelink link="{{ route('profile.show') }}">Profile</x-sidelink></li>
+
+                    {{-- Only show if admin --}}
+                    @if (auth()->user()->isAdmin())
+                        <li><x-sidelink link="{{ route('admin.dashboard') }}">Admin Dashboard</x-sidelink></li>
+                    @endif
                 @endauth
+
                 @guest
                     <li>
                         <x-sidelink link="{{ route('login') }}">Cart</x-sidelink>
