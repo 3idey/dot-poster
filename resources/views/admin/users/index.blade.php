@@ -6,7 +6,9 @@
     <table class="w-full bg-white shadow-md rounded-lg">
         <thead>
             <tr class="bg-gray-200 text-left">
+
                 <th class="p-3">ID</th>
+                <th class="p-3">Avatar</th>
                 <th class="p-3">Name</th>
                 <th class="p-3">Email</th>
                 <th class="p-3">Status</th>
@@ -16,7 +18,14 @@
         <tbody>
             @foreach ($users as $user)
                 <tr class="border-b">
+
                     <td class="p-3">{{ $user->id }}</td>
+                    <td class="rounded-md p-3"> <img
+                            src="{{ $user->avatar
+                                ? asset('storage/' . $user->avatar)
+                                : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}"
+                            class="w-20 h-20 rounded-full border-2 border-blue-500 shadow-lg" alt="avatar">
+                    </td>
                     <td class="p-3">{{ $user->name }}</td>
                     <td class="p-3">{{ $user->email }}</td>
                     <td class="p-3">{{ $user->is_banned ? 'banned' : 'active' }}</td>

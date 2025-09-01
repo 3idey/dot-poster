@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Mail\OrderStatusUpdate;
 use App\Models\Order;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class AdminOrderController extends Controller
 {
-
     public function index()
     {
         $orders = Order::with('user')->latest()->paginate(10);
+
         return view('admin.orders.index', compact('orders'));
     }
 
@@ -22,18 +24,31 @@ class AdminOrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
-        $request->validate([
-            'status' => 'required|in:pending,processing,shipped,completed,canceled',
+        $validated = $request->validate([
+            'status' => 'required|in:pending,processing,shipped,delivered,cancelled',
+            'payment_status' => 'nullable|in:unpaid,paid,refunded',
         ]);
 
-        $order->update(['status' => $request->status]);
+        $oldStatus = $order->status;
+        $order->update($validated);
 
-        return back()->with('success', 'Order status updated.');
+        // Send email notification if status changed
+        if ($oldStatus !== $validated['status']) {
+            Mail::to($order->user->email)->send(new OrderStatusUpdate($order, $oldStatus));
+        }
+
+        return back()->with('success', 'Order updated successfully.');
     }
 
     public function destroy(Order $order)
     {
+        // Restore stock for cancelled orders
+        foreach ($order->orderItems as $item) {
+            $item->product->increment('stock', $item->quantity);
+        }
+
         $order->delete();
-        return back()->with('success', 'Order deleted successfully.');
+
+        return back()->with('success', 'Order deleted and stock restored.');
     }
 }

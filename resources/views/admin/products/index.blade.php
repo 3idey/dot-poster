@@ -9,6 +9,7 @@
         <thead>
             <tr class="bg-gray-200 text-left">
                 <th class="p-3">ID</th>
+                <th class="p-3">Image</th>
                 <th class="p-3">Name</th>
                 <th class="p-3">Price</th>
                 <th class="p-3">Stock</th>
@@ -19,6 +20,7 @@
             @foreach ($products as $product)
                 <tr class="border-b">
                     <td class="p-3">{{ $product->id }}</td>
+                    <td class="p-3"><img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-24 h-24 object-cover"></td>
                     <td class="p-3">{{ $product->name }}</td>
                     <td class="p-3">${{ $product->price }}</td>
                     <td class="p-3">{{ $product->stock }}</td>

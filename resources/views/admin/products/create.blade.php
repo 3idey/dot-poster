@@ -1,17 +1,16 @@
 @extends('components.admin')
+
 @section('content')
     <div class="max-w-2xl mx-auto bg-white shadow rounded-lg p-6">
         <h1 class="text-xl font-semibold mb-4">Create Product</h1>
 
-        <form method="POST" action="{{ route('admin.products.update', $product->id) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('admin.products.store') }}" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
 
             {{-- Name --}}
             <div class="mb-4">
                 <label for="name" class="block font-medium">Name</label>
-                <input type="text" name="name" id="name" class="w-full border rounded p-2"
-                    value="{{ old('name', $product->name) }}" required>
+                <input type="text" name="name" id="name" class="w-full border rounded p-2" required>
                 @error('name')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
@@ -20,8 +19,7 @@
             {{-- Price --}}
             <div class="mb-4">
                 <label for="price" class="block font-medium">Price</label>
-                <input type="number" name="price" id="price" step="0.01" class="w-full border rounded p-2"
-                    value="{{ old('price', $product->price) }}" required>
+                <input type="number" name="price" id="price" step="0.01" class="w-full border rounded p-2" required>
                 @error('price')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
@@ -30,50 +28,48 @@
             {{-- Stock --}}
             <div class="mb-4">
                 <label for="stock" class="block font-medium">Stock</label>
-                <input type="number" name="stock" id="stock" min="0" class="w-full border rounded p-2"
-                    value="{{ old('stock', $product->stock  ) }}" required>
+                <input type="number" name="stock" id="stock" min="0" class="w-full border rounded p-2" required>
                 @error('stock')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
-          
 
             {{-- Status --}}
             <div class="mb-4">
                 <label for="status" class="block font-medium">Status</label>
                 <select name="status" id="status" class="w-full border rounded p-2" required>
-                    <option value="1" {{ old('status', $product->status) == '1' ? 'selected' : '' }}>Active</option>
-                    <option value="0" {{ old('status', $product->status) == '0' ? 'selected' : '' }}>Inactive</option>
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
                 </select>
                 @error('status')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
+            
             {{-- Category --}}
             <div class="mb-4">
                 <label for="category_id" class="block font-medium">Category</label>
                 <select name="category_id" id="category_id" class="w-full border rounded p-2" required>
                     <option value="">-- Select Category --</option>
                     @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('category_id', $product->category_id ) == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
                     @endforeach
                 </select>
                 @error('category_id')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
-
-
+            
             {{-- Description --}}
             <div class="mb-4">
                 <label for="description" class="block font-medium">Description</label>
-                <textarea name="description" id="description" rows="4" class="w-full border rounded p-2">{{ old('description', $product->description) }}</textarea>
+                <textarea name="description" id="description" rows="4" class="w-full border rounded p-2"></textarea>
                 @error('description')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
+            
+            {{-- Image --}}
             <div class="mb-4">
                 <label for="image" class="block font-medium">Image</label>
                 <input type="file" name="image" id="image" class="w-full border rounded p-2" accept="image/*">
@@ -81,11 +77,9 @@
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
-
+            
             {{-- Submit --}}
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
-                Save Product
-            </button>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Create Product</button>
         </form>
     </div>
 @endsection

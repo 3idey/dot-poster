@@ -1,61 +1,156 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎨 Dot-Poster E-commerce Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, full-featured e-commerce platform built with Laravel 12 for selling posters and artwork online.
 
-## About Laravel
+## ✨ Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 🛍️ **Customer Features**
+- **Product Catalog** - Browse posters with high-quality images
+- **Advanced Search** - Search by name, category, price range with sorting options
+- **Shopping Cart** - Add/remove items, quantity management
+- **Secure Checkout** - Stripe payment integration + cash on delivery
+- **Order Tracking** - View order history and status updates
+- **Product Reviews** - Rate and review purchased items
+- **User Profiles** - Manage personal information and addresses
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🔧 **Admin Features**
+- **Product Management** - Full CRUD with image uploads
+- **Category Management** - Hierarchical category organization
+- **Order Management** - Update status, track payments, manage fulfillment
+- **User Management** - Ban/unban users, view customer data
+- **Inventory Tracking** - Stock management with low-stock alerts
+- **Email Notifications** - Automated order confirmations and status updates
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🛡️ **Security & Performance**
+- Role-based access control (Customer/Admin)
+- Rate limiting on authentication
+- Secure file uploads with validation
+- CSRF protection on all forms
+- Input sanitization and validation
 
-## Learning Laravel
+## 🚀 Quick Start
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Prerequisites
+- PHP 8.2+
+- Composer
+- Node.js & npm
+- MariaDB/MySQL
+- Stripe account (for payments)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Installation
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Clone & Install Dependencies**
+```bash
+git clone <repository-url>
+cd dot-poster
+composer install
+npm install
+```
 
-## Laravel Sponsors
+2. **Environment Setup**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. **Configure Database**
+Update `.env` with your database credentials:
+```env
+DB_CONNECTION=mariadb
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=dot_poster
+DB_USERNAME=root
+DB_PASSWORD=your_password
+```
 
-### Premium Partners
+4. **Configure Stripe** (Optional)
+Add your Stripe keys to `.env`:
+```env
+STRIPE_KEY=pk_test_your_stripe_publishable_key
+STRIPE_SECRET=sk_test_your_stripe_secret_key
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+5. **Setup Database**
+```bash
+php artisan migrate
+php artisan db:seed
+```
 
-## Contributing
+6. **Start Development Server**
+```bash
+composer run dev
+```
+This runs the Laravel server, queue worker, logs, and Vite concurrently.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 📁 Project Structure
 
-## Code of Conduct
+### Models
+- **User** - Customer and admin accounts with roles
+- **Product** - Poster products with images, pricing, stock
+- **Category** - Hierarchical product categorization
+- **Order/OrderItem** - Order management and line items
+- **CartItem** - Shopping cart functionality
+- **Review** - Product reviews and ratings
+- **Payment** - Payment transaction records
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Key Controllers
+- **ProductController** - Public product browsing with search/filter
+- **CartController** - Shopping cart management
+- **CheckoutController** - Order processing and payment
+- **Admin/AdminProductController** - Product CRUD with image uploads
+- **Admin/AdminCategoryController** - Category management
+- **Admin/AdminOrderController** - Order status management
 
-## Security Vulnerabilities
+## 🎯 Usage
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### For Customers
+1. Browse products at `/products`
+2. Add items to cart
+3. Checkout with Stripe or cash payment
+4. Track orders in profile
+5. Leave reviews on purchased items
 
-## License
+### For Admins
+1. Access admin panel at `/admin/dashboard`
+2. Manage products, categories, orders, and users
+3. Upload product images
+4. Update order statuses (triggers email notifications)
+5. Monitor inventory levels
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🔧 Configuration
+
+### Email Setup
+Configure mail settings in `.env` for production:
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=your-smtp-host
+MAIL_PORT=587
+MAIL_USERNAME=your-email
+MAIL_PASSWORD=your-password
+```
+
+### File Storage
+Product images are stored in `storage/app/public/products/` and accessible via `/storage/products/` URL.
+
+## 🛠️ Development
+
+### Running Tests
+```bash
+composer run test
+```
+
+### Code Style
+```bash
+./vendor/bin/pint
+```
+
+### Queue Workers
+For production, run queue workers:
+```bash
+php artisan queue:work
+```
+
+## 📝 License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

@@ -11,7 +11,6 @@ class Product extends Model
 {
     use HasFactory, Notifiable;
 
-
     protected $fillable = [
         'name',
         'description',
@@ -20,6 +19,7 @@ class Product extends Model
         'slug',
         'stock',
         'status',
+        'image',
     ];
 
     protected static function booted()
@@ -30,7 +30,7 @@ class Product extends Model
             $slug = $base;
             $i = 1;
             while (static::where('slug', $slug)->exists()) {
-                $slug = $base . '-' . $i;
+                $slug = $base.'-'.$i;
                 $i++;
             }
             $product->slug = $slug;
@@ -43,7 +43,7 @@ class Product extends Model
                 $slug = $base;
                 $i = 1;
                 while (static::where('slug', $slug)->where('id', '!=', $product->id)->exists()) {
-                    $slug = $base . '-' . $i;
+                    $slug = $base.'-'.$i;
                     $i++;
                 }
                 $product->slug = $slug;
@@ -74,5 +74,27 @@ class Product extends Model
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
+    }
+
+    // Inventory management methods
+    public function isLowStock($threshold = 5)
+    {
+        return $this->stock <= $threshold;
+    }
+
+    public function isOutOfStock()
+    {
+        return $this->stock <= 0;
+    }
+
+    public function getStockStatusAttribute()
+    {
+        if ($this->isOutOfStock()) {
+            return 'out_of_stock';
+        } elseif ($this->isLowStock()) {
+            return 'low_stock';
+        }
+
+        return 'in_stock';
     }
 }

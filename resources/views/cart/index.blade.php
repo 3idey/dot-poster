@@ -31,10 +31,9 @@
 
         <div class="mt-6 flex items-center justify-between">
             <div class="text-2xl font-semibold">Total: ${{ number_format($total, 2) }}</div>
-            <form method="POST" action="{{ route('checkout.store') }}">
-                @csrf
-                <button class="px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700">Checkout (COD)</button>
-            </form>
+            <a href="{{ route('checkout.index') }}" class="px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 inline-block text-center">
+                Proceed to Checkout
+            </a>
         </div>
     @endif
 

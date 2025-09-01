@@ -16,7 +16,7 @@ Route::get('/about', function () {
     return view('about');
 });
 Route::get('/login', [LoginController::class, 'create'])->middleware('guest');
-Route::post('/login', [LoginController::class, 'store'])->middleware('guest')->name('login');
+Route::post('/login', [LoginController::class, 'store'])->middleware(['guest', 'throttle:5,1'])->name('login');
 Route::delete('/logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
 
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest');
@@ -45,4 +45,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    // Reviews
+    Route::post('/products/{product}/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
+    Route::delete('/reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
