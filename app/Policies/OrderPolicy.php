@@ -20,7 +20,7 @@ class OrderPolicy
      */
     public function view(User $user, Order $order): bool
     {
-        return $user->role === 'admin' || $user->id === $order->user_id;
+        return $user->role === 'admin' || $user->role === 'vendor' || $user->id === $order->user_id;
     }
 
     /**
@@ -36,7 +36,7 @@ class OrderPolicy
      */
     public function update(User $user, Order $order): bool
     {
-        return $user->role === 'admin' || $user->id === $order->user_id;
+        return $user->role === 'admin' || $user->role === 'vendor' || $user->id === $order->user_id;
     }
 
     /**
@@ -44,7 +44,7 @@ class OrderPolicy
      */
     public function delete(User $user, Order $order): bool
     {
-        return $user->role === 'admin' || $user->id === $order->user_id;
+        return $user->role === 'admin' || $user->role === 'vendor' || $user->id === $order->user_id;
     }
 
     /**
@@ -52,7 +52,7 @@ class OrderPolicy
      */
     public function restore(User $user, Order $order): bool
     {
-        return $user->role === 'admin';
+        return $user->role === 'admin' || $user->role === 'vendor';
     }
 
     /**
@@ -60,6 +60,6 @@ class OrderPolicy
      */
     public function forceDelete(User $user, Order $order): bool
     {
-        return $user->role === 'admin';
+        return $user->role === 'admin' || $user->role === 'vendor';
     }
 }

@@ -32,6 +32,11 @@
                     @if (auth()->user()->isAdmin())
                         <li><x-sidelink link="{{ route('admin.dashboard') }}">Admin Dashboard</x-sidelink></li>
                     @endif
+
+                    {{-- Only show if vendor --}}
+                    @if (auth()->user()->isVendor())
+                        <li><x-sidelink link="{{ route('vendor.dashboard') }}">Vendor Dashboard</x-sidelink></li>
+                    @endif
                 @endauth
 
                 @guest

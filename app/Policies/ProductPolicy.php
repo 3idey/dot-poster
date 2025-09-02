@@ -28,7 +28,7 @@ class ProductPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->role === 'vendor' && $user->is_active;
     }
 
     /**
@@ -36,7 +36,7 @@ class ProductPolicy
      */
     public function update(User $user, Product $product): bool
     {
-        return $user->role === 'admin';
+        return $user->role === 'admin' || ($user->role === 'vendor' && $user->id === $product->vendor_id);
     }
 
     /**
@@ -44,7 +44,7 @@ class ProductPolicy
      */
     public function delete(User $user, Product $product): bool
     {
-        return $user->role === 'admin';
+        return $user->role === 'admin' || ($user->role === 'vendor' && $user->id === $product->vendor_id);
     }
 
     /**
@@ -52,7 +52,7 @@ class ProductPolicy
      */
     public function restore(User $user, Product $product): bool
     {
-        return $user->role === 'admin';
+        return $user->role === 'admin' || ($user->role === 'vendor' && $user->id === $product->vendor_id);
     }
 
     /**
@@ -60,6 +60,6 @@ class ProductPolicy
      */
     public function forceDelete(User $user, Product $product): bool
     {
-        return $user->role === 'admin';
+        return $user->role === 'admin' || ($user->role === 'vendor' && $user->id === $product->vendor_id);
     }
 }

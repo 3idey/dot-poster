@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -24,6 +25,7 @@ class ProductFactory extends Factory
         return [
             'category_id' => Category::inRandomOrder()->value('id') ?? Category::factory(),
             'name' => $name,
+            'vendor_id' => User::inRandomOrder()->value('id') ?? User::factory(),
             'slug' => Str::slug($name).'-'.fake()->unique()->numberBetween(1000, 9999),
             'description' => fake()->paragraph(),
             'price' => fake()->randomFloat(2, 99, 999),

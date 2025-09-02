@@ -20,6 +20,7 @@ class Product extends Model
         'stock',
         'status',
         'image',
+        'vendor_id',
     ];
 
     protected static function booted()
@@ -96,5 +97,10 @@ class Product extends Model
         }
 
         return 'in_stock';
+    }
+
+    public function vendor()
+    {
+        return $this->belongsTo(User::class, 'vendor_id');
     }
 }
