@@ -3,7 +3,7 @@
 @section('content')
     <h1 class="text-2xl font-bold mb-6">Products Management</h1>
 
-    <a href="{{ route('admin.products.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded">+ Add Product</a>
+    <a href="{{ route('admin.products.create') }}" class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-4 py-2 rounded-xl hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">+ Add Product</a>
 
     <table class="w-full bg-white shadow-md rounded-lg mt-4">
         <thead>
@@ -26,11 +26,11 @@
                     <td class="p-3">{{ $product->stock }}</td>
                     <td class="p-3 space-x-2">
                         <a href="{{ route('admin.products.edit', $product) }}"
-                            class="bg-yellow-500 text-white px-3 py-1 rounded">Edit</a>
+                            class="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-3 py-1 rounded-xl hover:from-amber-600 hover:to-amber-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">Edit</a>
                         <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button class="bg-red-600 text-white px-3 py-1 rounded">Delete</button>
+                            <button class="bg-gradient-to-r from-red-600 to-red-700 text-white px-3 py-1 rounded-xl hover:from-red-700 hover:to-red-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">Delete</button>
                         </form>
                     </td>
                 </tr>

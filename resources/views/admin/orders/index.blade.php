@@ -24,14 +24,14 @@
                         <form action="{{ route('admin.orders.update', $order) }}" method="POST">
                             @csrf
                             @method('PUT')
-                            <select name="status" class="border p-1">
+                            <select name="status" class="border border-gray-300 rounded-lg p-2 bg-gray-50 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors">
                                 <option value="pending" @selected($order->status == 'pending')>Pending</option>
                                 <option value="processing" @selected($order->status == 'processing')>Processing</option>
                                 <option value="shipped" @selected($order->status == 'shipped')>Shipped</option>
                                 <option value="completed" @selected($order->status == 'completed')>Completed</option>
                                 <option value="canceled" @selected($order->status == 'canceled')>Canceled</option>
                             </select>
-                            <button class="bg-blue-600 text-white px-3 py-1 rounded">Update</button>
+                            <button class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-3 py-1 rounded-xl hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">Update</button>
                         </form>
                     </td>
                 </tr>

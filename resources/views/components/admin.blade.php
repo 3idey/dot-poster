@@ -14,10 +14,10 @@
             <h2 class="text-xl font-bold px-6">Admin</h2>
 
             <ul class="w-full px-6 space-y-4">
-                <li><a href="{{ route('admin.users.index') }}" class="block hover:text-blue-400">Users</a></li>
-                <li><a href="{{ route('admin.products.index') }}" class="block hover:text-blue-400">Products</a></li>
-                <li><a href="{{ route('admin.orders.index') }}" class="block hover:text-blue-400">Orders</a></li>
-                <li><a href="{{ route('admin.categories.index') }}" class="block hover:text-blue-400">Categories</a></li>
+                <li><a href="{{ route('admin.users.index') }}" class="block hover:text-emerald-400">Users</a></li>
+                <li><a href="{{ route('admin.products.index') }}" class="block hover:text-emerald-400">Products</a></li>
+                <li><a href="{{ route('admin.orders.index') }}" class="block hover:text-emerald-400">Orders</a></li>
+                <li><a href="{{ route('admin.categories.index') }}" class="block hover:text-emerald-400">Categories</a></li>
             </ul>
         </nav>
 

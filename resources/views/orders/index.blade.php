@@ -21,7 +21,7 @@
                             <div class="text-sm text-white">{{ $o->created_at->format('Y-m-d H:i') }}</div>
                         </div>
                         <div class="text-right">
-                            <div class="text-sm uppercase text-blue-300 tracking-wide">{{ $o->status }}</div>
+                            <div class="text-sm uppercase text-emerald-300 tracking-wide">{{ $o->status }}</div>
                             <div class="font-semibold text-emerald-500 ">${{ number_format($o->total_amount, 2) }}</div>
                         </div>
                     </div>

@@ -11,7 +11,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700">Name</label>
                 <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500"
+                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-emerald-500"
                     required>
                 @error('name')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -22,7 +22,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700">Email</label>
                 <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500"
+                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-emerald-500"
                     required>
                 @error('email')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -33,7 +33,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700">Phone</label>
                 <input type="text" name="phone" value="{{ old('phone', $user->phone) }}"
-                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500">
+                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-emerald-500">
                 @error('phone')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
@@ -43,7 +43,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700">Address</label>
                 <input type="text" name="address" value="{{ old('address', $user->address) }}"
-                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500">
+                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-emerald-500">
                 @error('address')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
@@ -63,7 +63,7 @@
                 <label class="block text-sm font-medium text-gray-700">Current Password <span
                         class="text-red-500">*</span></label>
                 <input type="password" name="current_password" required
-                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500">
+                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-emerald-500">
                 @error('current_password')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
@@ -73,7 +73,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700">New Password</label>
                 <input type="password" name="password"
-                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500">
+                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-emerald-500">
                 @error('password')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
@@ -83,7 +83,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700">Confirm New Password</label>
                 <input type="password" name="password_confirmation"
-                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500">
+                    class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-emerald-500">
             </div>
 
             <!-- Submit -->
@@ -92,7 +92,7 @@
                     class="px-4 py-2 rounded-lg border border-gray-400 text-gray-700 hover:bg-gray-200">
                     Cancel
                 </a>
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-white shadow">
+                <button type="submit" class="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 px-4 py-2 rounded-xl text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
                     Save Changes
                 </button>
             </div>

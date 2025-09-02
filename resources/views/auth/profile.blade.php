@@ -9,7 +9,7 @@
                 <img src="{{ $user->avatar
                     ? asset('storage/' . $user->avatar)
                     : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}"
-                    class="w-20 h-20 rounded-full border-2 border-blue-500 shadow-lg" alt="avatar">
+                    class="w-20 h-20 rounded-full border-2 border-emerald-500 shadow-lg" alt="avatar">
 
 
                 <div>
@@ -19,7 +19,7 @@
             </div>
 
             <a href="{{ route('profile.edit') }}"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow">
+                class="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white px-4 py-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
                 Edit Profile
             </a>
         </div>

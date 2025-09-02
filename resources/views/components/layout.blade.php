@@ -18,7 +18,7 @@
                         <x-sidelink link="{{ route('cart.index') }}">
                             Cart
                             @if (auth()->user()->cartItems()->count() > 0)
-                                <span class="ml-2 bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                                <span class="ml-2 bg-emerald-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
                                     {{ auth()->user()->cartItems()->count() }}
                                 </span>
                             @endif

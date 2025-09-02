@@ -24,7 +24,7 @@
                             src="{{ $user->avatar
                                 ? asset('storage/' . $user->avatar)
                                 : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=0D8ABC&color=fff' }}"
-                            class="w-20 h-20 rounded-full border-2 border-blue-500 shadow-lg" alt="avatar">
+                            class="w-20 h-20 rounded-full border-2 border-emerald-500 shadow-lg" alt="avatar">
                     </td>
                     <td class="p-3">{{ $user->name }}</td>
                     <td class="p-3">{{ $user->email }}</td>
@@ -34,20 +34,20 @@
                             <form action="{{ route('admin.users.ban', $user) }}" method="POST" class="inline">
                                 @csrf
                                 @method('PATCH')
-                                <button class="bg-red-600 text-white px-3 py-1 rounded">Ban</button>
+                                <button class="bg-gradient-to-r from-red-600 to-red-700 text-white px-3 py-1 rounded-xl hover:from-red-700 hover:to-red-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">Ban</button>
                             </form>
                         @else
                             <form action="{{ route('admin.users.unban', $user) }}" method="POST" class="inline">
                                 @csrf
                                 @method('PATCH')
-                                <button class="bg-green-600 text-white px-3 py-1 rounded">Unban</button>
+                                <button class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-3 py-1 rounded-xl hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">Unban</button>
                             </form>
                         @endif
 
                         <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button class="bg-gray-600 text-white px-3 py-1 rounded">Delete</button>
+                            <button class="bg-gradient-to-r from-gray-600 to-gray-700 text-white px-3 py-1 rounded-xl hover:from-gray-700 hover:to-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">Delete</button>
                         </form>
                     </td>
                 </tr>
