@@ -96,27 +96,31 @@
                     @endif
                     
                     @auth
-                        <form method="POST" action="{{ route('cart.store') }}" class="space-y-3">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $p->id }}">
+                        <!-- Wishlist and Cart Actions -->
+                        <div class="flex items-center space-x-2 mb-3">
+                            <button onclick="toggleWishlist({{ $p->id }})" 
+                                    id="wishlist-btn-{{ $p->id }}"
+                                    class="p-2 rounded-lg border transition-all duration-200 wishlist-button"
+                                    data-product-id="{{ $p->id }}"
+                                    data-in-wishlist="{{ auth()->user()->wishlists()->where('product_id', $p->id)->exists() ? 'true' : 'false' }}">
+                                <svg class="w-5 h-5 wishlist-heart" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                            </button>
                             
-                            <div class="flex items-center space-x-3">
-                                <label class="text-sm text-gray-300">Qty:</label>
-                                <select name="quantity" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
-                                    @for ($i = 1; $i <= min(10, $p->stock); $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                                
-                                <button type="submit" class="flex-1 px-4 py-2 rounded-xl text-white bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:scale-105 shadow-lg {{ $p->stock <= 0 ? 'opacity-50 cursor-not-allowed' : '' }}" 
+                            <form method="POST" action="{{ route('cart.store') }}" class="flex-1">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $p->id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="w-full px-4 py-2 rounded-xl text-white bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 transform hover:scale-105 shadow-lg {{ $p->stock <= 0 ? 'opacity-50 cursor-not-allowed' : '' }}" 
                                         {{ $p->stock <= 0 ? 'disabled' : '' }}>
                                     <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5-6m0 0h15M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z"></path>
                                     </svg>
                                     {{ $p->stock <= 0 ? 'Out of Stock' : 'Add to Cart' }}
                                 </button>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     @else
                         <a href="{{ route('login') }}" class="block text-center px-4 py-2 rounded-xl text-emerald-400 border border-emerald-500 hover:bg-emerald-500 hover:text-white transition-all duration-200">
                             Login to Buy
@@ -130,6 +134,67 @@
     <div class="mt-6">
         {{ $products->links() }}
     </div>
+
+    <script>
+        // Wishlist functionality for product index
+        function updateWishlistButton(productId, inWishlist) {
+            const button = document.getElementById(`wishlist-btn-${productId}`);
+            const heart = button.querySelector('.wishlist-heart');
+            
+            if (inWishlist) {
+                button.className = 'p-2 rounded-lg border border-red-500 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all duration-200 wishlist-button';
+                heart.setAttribute('fill', 'currentColor');
+            } else {
+                button.className = 'p-2 rounded-lg border border-gray-600 text-gray-400 hover:border-red-500 hover:text-red-400 transition-all duration-200 wishlist-button';
+                heart.setAttribute('fill', 'none');
+            }
+        }
+
+        async function toggleWishlist(productId) {
+            try {
+                const response = await fetch('{{ route("wishlist.toggle") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ product_id: productId })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateWishlistButton(productId, data.in_wishlist);
+                    
+                    // Show notification
+                    const notification = document.createElement('div');
+                    notification.className = 'fixed top-4 right-4 bg-emerald-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 transform translate-x-full opacity-0 transition-all duration-300';
+                    notification.textContent = data.message;
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.classList.remove('translate-x-full', 'opacity-0');
+                    }, 100);
+                    
+                    setTimeout(() => {
+                        notification.classList.add('translate-x-full', 'opacity-0');
+                        setTimeout(() => notification.remove(), 300);
+                    }, 3000);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Initialize wishlist buttons on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.wishlist-button').forEach(button => {
+                const productId = button.dataset.productId;
+                const inWishlist = button.dataset.inWishlist === 'true';
+                updateWishlistButton(productId, inWishlist);
+            });
+        });
+    </script>
 
 </x-layout>
 <x-footer />

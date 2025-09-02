@@ -54,6 +54,20 @@
             @endif
 
             @auth
+                <!-- Wishlist Button -->
+                <div class="mb-4">
+                    <button onclick="toggleWishlist({{ $product->id }})" 
+                            id="wishlist-btn-{{ $product->id }}"
+                            class="flex items-center space-x-2 px-4 py-2 rounded-lg border transition-all duration-200 wishlist-button"
+                            data-product-id="{{ $product->id }}"
+                            data-in-wishlist="{{ auth()->user()->wishlists()->where('product_id', $product->id)->exists() ? 'true' : 'false' }}">
+                        <svg class="w-5 h-5 wishlist-heart" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        <span class="wishlist-text">Add to Wishlist</span>
+                    </button>
+                </div>
+
                 @if($product->stock > 0)
                     <form method="POST" action="{{ route('cart.store') }}" class="space-y-4">
                         @csrf
@@ -228,6 +242,72 @@
                     }
                 });
             });
+        });
+
+        // Wishlist functionality
+        function updateWishlistButton(productId, inWishlist) {
+            const button = document.getElementById(`wishlist-btn-${productId}`);
+            const heart = button.querySelector('.wishlist-heart');
+            const text = button.querySelector('.wishlist-text');
+            
+            if (inWishlist) {
+                button.className = 'flex items-center space-x-2 px-4 py-2 rounded-lg border border-red-500 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all duration-200 wishlist-button';
+                heart.setAttribute('fill', 'currentColor');
+                text.textContent = 'In Wishlist';
+            } else {
+                button.className = 'flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-600 text-gray-400 hover:border-red-500 hover:text-red-400 transition-all duration-200 wishlist-button';
+                heart.setAttribute('fill', 'none');
+                text.textContent = 'Add to Wishlist';
+            }
+        }
+
+        async function toggleWishlist(productId) {
+            try {
+                const response = await fetch('{{ route("wishlist.toggle") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ product_id: productId })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateWishlistButton(productId, data.in_wishlist);
+                    
+                    // Show notification
+                    const notification = document.createElement('div');
+                    notification.className = 'fixed top-4 right-4 bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full opacity-0 transition-all duration-300';
+                    notification.textContent = data.message;
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.classList.remove('translate-x-full', 'opacity-0');
+                    }, 100);
+                    
+                    setTimeout(() => {
+                        notification.classList.add('translate-x-full', 'opacity-0');
+                        setTimeout(() => notification.remove(), 300);
+                    }, 3000);
+                } else {
+                    alert(data.message || 'Something went wrong');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong');
+            }
+        }
+
+        // Initialize wishlist button state on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.querySelector('.wishlist-button');
+            if (button) {
+                const productId = button.dataset.productId;
+                const inWishlist = button.dataset.inWishlist === 'true';
+                updateWishlistButton(productId, inWishlist);
+            }
         });
     </script>
 </x-layout>
