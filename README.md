@@ -49,7 +49,7 @@ A modern, full-featured e-commerce platform built with Laravel 12 for selling po
 
 1. **Clone & Install Dependencies**
 ```bash
-git clone <repository-url>
+git clone https://github.com/3idey/dot-poster.git
 cd dot-poster
 composer install
 npm install
