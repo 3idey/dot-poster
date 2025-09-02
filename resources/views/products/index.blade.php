@@ -63,7 +63,7 @@
 
     <div class=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         @foreach ($products as $p)
-            @php $img = $p->image ? asset('storage/' . $p->image) : ($p->images->first()?->image_url ?? asset('images/placeholder.jpg')); @endphp
+            @php $img = $p->image ? asset('storage/' . $p->image) : ($p->images->first() ? $p->images->first()->image_url : asset('images/placeholder.svg')); @endphp
             <div class="bg-gray-800 border border-gray-700 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group">
                 <a href="{{ route('products.show', $p->id) }}" class="block">
                     <div class="relative overflow-hidden rounded-xl mb-4">

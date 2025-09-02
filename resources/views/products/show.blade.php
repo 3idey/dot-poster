@@ -5,7 +5,12 @@
         <!-- Product Images -->
         <div class="space-y-4">
             <div class="relative overflow-hidden rounded-2xl bg-gray-800 border border-gray-700">
-                <img src="{{ $product->images->first()->image_url ?? '' }}" 
+                @php
+                    $mainImage = $product->image ? asset('storage/' . $product->image) : 
+                                ($product->images->first() ? $product->images->first()->image_url : 
+                                asset('images/placeholder.svg'));
+                @endphp
+                <img id="main-product-image" src="{{ $mainImage }}" 
                      class="w-full h-96 object-cover" 
                      alt="{{ $product->name }}">
             </div>
@@ -14,7 +19,7 @@
                     @foreach ($product->images as $img)
                         <img src="{{ $img->image_url }}" 
                              class="w-16 h-16 object-cover rounded-xl border-2 border-gray-700 hover:border-emerald-500 cursor-pointer transition-colors flex-shrink-0"
-                             onclick="document.querySelector('.w-full.h-96').src = '{{ $img->image_url }}'">
+                             onclick="document.getElementById('main-product-image').src = '{{ $img->image_url }}'">
                     @endforeach
                 </div>
             @endif
@@ -124,9 +129,7 @@
                         <div class="bg-gray-700 rounded-xl p-4 border border-gray-600">
                             <div class="flex items-center justify-between mb-2">
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
-                                        <span class="text-white text-sm font-medium">{{ substr($review->user->name, 0, 1) }}</span>
-                                    </div>
+                                    <img src="{{ asset('storage/' . $review->user->avatar ?? 'images/placeholder.svg') }}" alt="User Avatar" class="w-8 h-8 rounded-full">
                                     <span class="text-white font-medium">{{ $review->user->name }}</span>
                                 </div>
                                 <div class="flex text-yellow-400">
@@ -190,7 +193,12 @@
                 @foreach($product->category->products->where('id', '!=', $product->id)->take(4) as $relatedProduct)
                     <div class="bg-gray-800 border border-gray-700 rounded-2xl p-4 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                         <a href="{{ route('products.show', $relatedProduct->id) }}" class="block">
-                            <img src="{{ $relatedProduct->images->first()->image_url ?? '' }}" 
+                            @php
+                                $relatedImage = $relatedProduct->image ? asset('storage/' . $relatedProduct->image) : 
+                                              ($relatedProduct->images->first() ? $relatedProduct->images->first()->image_url : 
+                                              asset('images/placeholder.svg'));
+                            @endphp
+                            <img src="{{ $relatedImage }}" 
                                  class="w-full h-48 object-cover rounded-xl mb-3"
                                  alt="{{ $relatedProduct->name }}">
                             <h3 class="text-white font-medium mb-2">{{ $relatedProduct->name }}</h3>
