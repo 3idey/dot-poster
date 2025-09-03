@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 
@@ -16,14 +15,14 @@ class WishlistController extends Controller
     public function index()
     {
         $wishlistItems = auth()->user()->wishlistProducts()->with('category', 'images')->paginate(12);
-        
+
         return view('wishlist.index', compact('wishlistItems'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id'
+            'product_id' => 'required|exists:products,id',
         ]);
 
         $user = auth()->user();
@@ -33,25 +32,25 @@ class WishlistController extends Controller
         if ($user->wishlists()->where('product_id', $productId)->exists()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Product already in wishlist'
+                'message' => 'Product already in wishlist',
             ], 409);
         }
 
         $user->wishlists()->create([
-            'product_id' => $productId
+            'product_id' => $productId,
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Product added to wishlist',
-            'wishlist_count' => $user->wishlists()->count()
+            'wishlist_count' => $user->wishlists()->count(),
         ]);
     }
 
     public function destroy(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id'
+            'product_id' => 'required|exists:products,id',
         ]);
 
         $user = auth()->user();
@@ -60,19 +59,19 @@ class WishlistController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Product removed from wishlist',
-            'wishlist_count' => $user->wishlists()->count()
+            'wishlist_count' => $user->wishlists()->count(),
         ]);
     }
 
     public function toggle(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id'
+            'product_id' => 'required|exists:products,id',
         ]);
 
         $user = auth()->user();
         $productId = $request->product_id;
-        
+
         $wishlistItem = $user->wishlists()->where('product_id', $productId)->first();
 
         if ($wishlistItem) {
@@ -89,7 +88,7 @@ class WishlistController extends Controller
             'success' => true,
             'in_wishlist' => $inWishlist,
             'message' => $message,
-            'wishlist_count' => $user->wishlists()->count()
+            'wishlist_count' => $user->wishlists()->count(),
         ]);
     }
 }

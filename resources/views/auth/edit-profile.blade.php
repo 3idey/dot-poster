@@ -58,7 +58,8 @@
             </div>
 
 
-            <!-- Current Password -->
+            <!-- Current Password (only for non-OAuth users) -->
+            @if(!$user->google_id)
             <div class="pt-4 border-t border-gray-300">
                 <label class="block text-sm font-medium text-gray-700">Current Password <span
                         class="text-red-500">*</span></label>
@@ -68,8 +69,19 @@
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
+            @else
+            <div class="pt-4 border-t border-gray-300">
+                <p class="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
+                    <svg class="inline w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
+                    You signed in with Google. Password changes are managed through your Google account.
+                </p>
+            </div>
+            @endif
 
-            <!-- New Password -->
+            <!-- New Password (only for non-OAuth users) -->
+            @if(!$user->google_id)
             <div>
                 <label class="block text-sm font-medium text-gray-700">New Password</label>
                 <input type="password" name="password"
@@ -85,6 +97,7 @@
                 <input type="password" name="password_confirmation"
                     class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-emerald-500">
             </div>
+            @endif
 
             <!-- Submit -->
             <div class="flex justify-end pt-4 space-x-3">

@@ -18,6 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->prefix('vendor')
                 ->as('vendor.')
                 ->group(base_path('routes/vendor.php'));
+            Route::middleware('web')
+                ->group(base_path('routes/google.php'));
         }
     )
     ->withMiddleware(function ($middleware): void {

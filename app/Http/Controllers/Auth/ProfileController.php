@@ -33,21 +33,30 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        $data = $request->validate([
+        // Different validation rules for Google OAuth users
+        $validationRules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,'.$user->id,
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
-            'current_password' => 'required|string',
-            'password' => 'nullable|string|min:6|confirmed',
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+        ];
 
-        if (! Hash::check($request->current_password, $user->password)) {
+        // Only require password validation for non-Google users
+        if (!$user->google_id) {
+            $validationRules['current_password'] = 'required|string';
+            $validationRules['password'] = 'nullable|string|min:6|confirmed';
+        }
+
+        $data = $request->validate($validationRules);
+
+        // Password verification for non-Google users only
+        if (!$user->google_id && !Hash::check($request->current_password, $user->password)) {
             return back()->withErrors(['current_password' => 'Your current password is incorrect.']);
         }
 
-        if ($request->filled('password')) {
+        // Handle password updates for non-Google users only
+        if (!$user->google_id && $request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         } else {
             unset($data['password']);
@@ -55,7 +64,8 @@ class ProfileController extends Controller
 
         unset($data['current_password']);
         if ($request->hasFile('avatar')) {
-            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+            // Only delete local avatar files, not Google URLs
+            if ($user->avatar && !str_starts_with($user->avatar, 'http') && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
             }
 

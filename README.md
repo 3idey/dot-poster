@@ -1,10 +1,10 @@
-# 🎨 Dot-Poster E-commerce Platform
+# Dot-Poster E-commerce Platform
 
 A modern, full-featured e-commerce platform built with Laravel 12 for selling posters and artwork online.
 
-## ✨ Features
+## Features
 
-### 🛍️ **Customer Features**
+### **Customer Features**
 - **Product Catalog** - Browse posters with high-quality image galleries and thumbnails
 - **Advanced Search** - Search by name, category, price range with sorting options
 - **Shopping Cart** - Add/remove items, quantity management with real-time updates
@@ -13,8 +13,9 @@ A modern, full-featured e-commerce platform built with Laravel 12 for selling po
 - **Product Reviews** - Interactive star ratings and detailed review system
 - **User Profiles** - Manage personal information, addresses, and avatar uploads
 - **Email Notifications** - Automated order confirmations and status update emails
+- **Google Sign-In** - OAuth authentication with Google accounts for seamless login
 
-### 🔧 **Admin Features**
+### **Admin Features**
 - **Product Management** - Full CRUD with multiple image uploads and gallery management
 - **Category Management** - Hierarchical category organization with nested structures
 - **Order Management** - Update status, track payments, manage fulfillment with email notifications
@@ -22,21 +23,22 @@ A modern, full-featured e-commerce platform built with Laravel 12 for selling po
 - **Inventory Tracking** - Stock management with low-stock alerts and warnings
 - **Email System** - Automated order confirmations and status update notifications
 
-### 🏪 **Vendor Features**
+### **Vendor Features**
 - **Vendor Dashboard** - Dedicated vendor panel with role-based access
 - **Product Management** - Vendors can manage their own product listings
 - **Order Fulfillment** - Track and update orders for vendor products
 - **Inventory Control** - Manage stock levels and product availability
 - **Sales Analytics** - View vendor-specific order and product performance
 
-### 🛡️ **Security & Performance**
-- Role-based access control (Customer/Admin)
+### **Security & Performance**
+- Role-based access control (Customer/Admin/Vendor)
 - Rate limiting on authentication
 - Secure file uploads with validation
 - CSRF protection on all forms
 - Input sanitization and validation
+- OAuth integration with Google Sign-In
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - PHP 8.2+
@@ -44,6 +46,7 @@ A modern, full-featured e-commerce platform built with Laravel 12 for selling po
 - Node.js & npm
 - MariaDB/MySQL
 - Stripe account (for payments)
+- Google OAuth credentials (for Google Sign-In)
 
 ### Installation
 
@@ -79,22 +82,29 @@ STRIPE_KEY=pk_test_your_stripe_publishable_key
 STRIPE_SECRET=sk_test_your_stripe_secret_key
 ```
 
-5. **Setup Database**
+5. **Configure Google OAuth** (Optional)
+Add your Google OAuth credentials to `.env`:
+```env
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+```
+
+6. **Setup Database**
 ```bash
 php artisan migrate
 php artisan db:seed
 ```
 
-6. **Start Development Server**
+7. **Start Development Server**
 ```bash
 composer run dev
 ```
 This runs the Laravel server, queue worker, logs, and Vite concurrently.
 
-## 📁 Project Structure
+## Project Structure
 
 ### Models
-- **User** - Customer, admin, and vendor accounts with role-based access
+- **User** - Customer, admin, and vendor accounts with role-based access and Google OAuth support
 - **Product** - Poster products with multiple images, pricing, stock, vendor assignment
 - **ProductImage** - Multiple image support with gallery functionality
 - **Category** - Hierarchical product categorization
@@ -107,6 +117,8 @@ This runs the Laravel server, queue worker, logs, and Vite concurrently.
 - **ProductController** - Public product browsing with advanced search/filter
 - **CartController** - Shopping cart management with AJAX updates
 - **CheckoutController** - Order processing with Stripe and cash payment options
+- **GoogleSigninController** - Google OAuth authentication and user management
+- **ProfileController** - User profile management with OAuth support
 - **Admin/AdminProductController** - Product CRUD with multiple image uploads
 - **Admin/AdminCategoryController** - Category management with hierarchy
 - **Admin/AdminOrderController** - Order status management with email notifications
@@ -118,14 +130,15 @@ This runs the Laravel server, queue worker, logs, and Vite concurrently.
 - **OrderStatusUpdate** - Email notifications for status changes (shipped, delivered, etc.)
 - **Markdown Templates** - Professional email templates with order details and tracking links
 
-## 🎯 Usage
+## Usage
 
 ### For Customers
 1. Browse products at `/products`
-2. Add items to cart
-3. Checkout with Stripe or cash payment
-4. Track orders in profile
-5. Leave reviews on purchased items
+2. Register/login with email or Google Sign-In
+3. Add items to cart
+4. Checkout with Stripe or cash payment
+5. Track orders in profile
+6. Leave reviews on purchased items
 
 ### For Admins
 1. Access admin panel at `/admin/dashboard`
@@ -143,7 +156,7 @@ This runs the Laravel server, queue worker, logs, and Vite concurrently.
 5. Update order fulfillment status
 6. Monitor vendor inventory and sales
 
-## 🔧 Configuration
+## Configuration
 
 ### Email Setup
 Configure mail settings in `.env` for production:
@@ -164,13 +177,25 @@ STRIPE_KEY=pk_live_your_stripe_publishable_key
 STRIPE_SECRET=sk_live_your_stripe_secret_key
 ```
 
+### Google OAuth Setup
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing one
+3. Enable Google+ API
+4. Create OAuth 2.0 credentials
+5. Add authorized redirect URI: `http://your-domain.com/auth/google/callback`
+6. Configure in `.env`:
+```env
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+```
+
 ### File Storage
 - Product images stored in `storage/app/public/products/`
 - Multiple images per product supported via ProductImage model
 - Automatic fallback to placeholder.svg for missing images
 - Images accessible via `/storage/products/` URL
 
-## 🛠️ Development
+## Development
 
 ### Running Tests
 ```bash
@@ -188,6 +213,6 @@ For production, run queue workers:
 php artisan queue:work
 ```
 
-## 📝 License
+## License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

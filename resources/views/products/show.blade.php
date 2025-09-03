@@ -143,7 +143,7 @@
                         <div class="bg-gray-700 rounded-xl p-4 border border-gray-600">
                             <div class="flex items-center justify-between mb-2">
                                 <div class="flex items-center space-x-3">
-                                    <img src="{{ asset('storage/' . $review->user->avatar ?? 'images/placeholder.svg') }}" alt="User Avatar" class="w-8 h-8 rounded-full">
+                                    <img src="{{ $review->user->avatar_url }}" alt="User Avatar" class="w-8 h-8 rounded-full">
                                     <span class="text-white font-medium">{{ $review->user->name }}</span>
                                 </div>
                                 <div class="flex text-yellow-400">

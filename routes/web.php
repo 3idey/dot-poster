@@ -1,29 +1,25 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\Auth\ProfileController;
-use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', fn () => to_route('products.index'))->name('home');
 Route::get('/about', function () {
     return view('about');
 });
-Route::get('/login', [LoginController::class, 'create'])->middleware('guest');
+Route::get('/login', [LoginController::class, 'create'])->middleware('guest')->name('login.create');
 Route::post('/login', [LoginController::class, 'store'])->middleware(['guest', 'throttle:5,1'])->name('login');
 Route::delete('/logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
 
-Route::get('/register', [RegisterController::class, 'create'])->middleware('guest');
+Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register.create');
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register');
-
-Route::get('/', fn () => to_route('products.index'));
 
 Route::resource('products', ProductController::class)->only(['index', 'show']);
 

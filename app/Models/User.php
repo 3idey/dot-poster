@@ -27,6 +27,9 @@ class User extends Authenticatable
         'role',
         'avatar',
         'is_banned',
+        'google_id',
+        'google_token',
+        'google_refresh_token',
     ];
 
     /**
@@ -96,5 +99,20 @@ class User extends Authenticatable
     public function isActive()
     {
         return $this->is_active;
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        if (!$this->avatar) {
+            return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=0D8ABC&color=fff';
+        }
+
+        // If avatar starts with http, it's a Google/external URL
+        if (str_starts_with($this->avatar, 'http')) {
+            return $this->avatar;
+        }
+
+        // Otherwise, it's a local file
+        return asset('storage/' . $this->avatar);
     }
 }
