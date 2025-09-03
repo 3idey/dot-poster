@@ -103,8 +103,8 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute()
     {
-        if (!$this->avatar) {
-            return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=0D8ABC&color=fff';
+        if (! $this->avatar) {
+            return 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&background=0D8ABC&color=fff';
         }
 
         // If avatar starts with http, it's a Google/external URL
@@ -113,6 +113,6 @@ class User extends Authenticatable
         }
 
         // Otherwise, it's a local file
-        return asset('storage/' . $this->avatar);
+        return asset('storage/'.$this->avatar);
     }
 }

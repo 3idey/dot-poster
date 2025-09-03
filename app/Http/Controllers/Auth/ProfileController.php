@@ -43,7 +43,7 @@ class ProfileController extends Controller
         ];
 
         // Only require password validation for non-Google users
-        if (!$user->google_id) {
+        if (! $user->google_id) {
             $validationRules['current_password'] = 'required|string';
             $validationRules['password'] = 'nullable|string|min:6|confirmed';
         }
@@ -51,12 +51,12 @@ class ProfileController extends Controller
         $data = $request->validate($validationRules);
 
         // Password verification for non-Google users only
-        if (!$user->google_id && !Hash::check($request->current_password, $user->password)) {
+        if (! $user->google_id && ! Hash::check($request->current_password, $user->password)) {
             return back()->withErrors(['current_password' => 'Your current password is incorrect.']);
         }
 
         // Handle password updates for non-Google users only
-        if (!$user->google_id && $request->filled('password')) {
+        if (! $user->google_id && $request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         } else {
             unset($data['password']);
@@ -65,7 +65,7 @@ class ProfileController extends Controller
         unset($data['current_password']);
         if ($request->hasFile('avatar')) {
             // Only delete local avatar files, not Google URLs
-            if ($user->avatar && !str_starts_with($user->avatar, 'http') && Storage::disk('public')->exists($user->avatar)) {
+            if ($user->avatar && ! str_starts_with($user->avatar, 'http') && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
             }
 

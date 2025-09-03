@@ -75,27 +75,14 @@ DB_USERNAME=root
 DB_PASSWORD=your_password
 ```
 
-4. **Configure Stripe** (Optional)
-Add your Stripe keys to `.env`:
-```env
-STRIPE_KEY=pk_test_your_stripe_publishable_key
-STRIPE_SECRET=sk_test_your_stripe_secret_key
-```
 
-5. **Configure Google OAuth** (Optional)
-Add your Google OAuth credentials to `.env`:
-```env
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-```
-
-6. **Setup Database**
+4. **Setup Database**
 ```bash
 php artisan migrate
 php artisan db:seed
 ```
 
-7. **Start Development Server**
+5. **Start Development Server**
 ```bash
 composer run dev
 ```
