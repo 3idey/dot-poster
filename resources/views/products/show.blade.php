@@ -1,4 +1,4 @@
-<x-header title=".poster" />
+<x-header title="Product" />
 <x-layout>
 
     <div class="grid md:grid-cols-2 gap-12">
@@ -12,14 +12,17 @@
                 @endphp
                 <img id="main-product-image" src="{{ $mainImage }}" 
                      class="w-full h-96 object-cover" 
-                     alt="{{ $product->name }}">
+                     alt="{{ $product->name }}"
+                     loading="eager">
             </div>
             @if($product->images->count() > 1)
                 <div class="flex gap-3 overflow-x-auto">
                     @foreach ($product->images as $img)
                         <img src="{{ $img->image_url }}" 
-                             class="w-16 h-16 object-cover rounded-xl border-2 border-gray-700 hover:border-emerald-500 cursor-pointer transition-colors flex-shrink-0"
-                             onclick="document.getElementById('main-product-image').src = '{{ $img->image_url }}'">
+                             class="product-thumbnail w-16 h-16 object-cover rounded-xl border-2 border-gray-700 hover:border-emerald-500 cursor-pointer transition-colors flex-shrink-0"
+                             data-full-image="{{ $img->image_url }}"
+                             alt="{{ $product->name }}"
+                             loading="lazy">
                     @endforeach
                 </div>
             @endif
@@ -28,15 +31,15 @@
         <!-- Product Details -->
         <div class="space-y-6">
             <div>
-                <h1 class="text-4xl font-bold text-white mb-3">{{ $product->name }}</h1>
-                <p class="text-gray-300 text-lg leading-relaxed">{{ $product->description }}</p>
+                <h1 class="text-4xl font-bold text-gray-800 mb-3">{{ $product->name }}</h1>
+                <p class="text-gray-600 text-lg leading-relaxed">{{ $product->description }}</p>
             </div>
 
             <div class="flex items-center justify-between">
-                <div class="text-3xl font-bold text-emerald-400">${{ number_format($product->price, 2) }}</div>
+                <div class="text-3xl font-bold text-emerald-600">${{ number_format($product->price, 2) }}</div>
                 <div class="text-right">
-                    <div class="text-sm text-gray-400">Stock Available</div>
-                    <div class="text-lg font-semibold {{ $product->stock <= 5 ? 'text-red-400' : 'text-white' }}">
+                    <div class="text-sm font-semibold text-gray-900">Stock Available</div>
+                    <div class="text-lg font-semibold {{ $product->stock <= 5 ? 'text-red-400' : 'text-gray-600' }}">
                         {{ $product->stock }} units
                     </div>
                 </div>
@@ -56,15 +59,17 @@
             @auth
                 <!-- Wishlist Button -->
                 <div class="mb-4">
-                    <button onclick="toggleWishlist({{ $product->id }})" 
-                            id="wishlist-btn-{{ $product->id }}"
-                            class="flex items-center space-x-2 px-4 py-2 rounded-lg border transition-all duration-200 wishlist-button"
-                            data-product-id="{{ $product->id }}"
-                            data-in-wishlist="{{ auth()->user()->wishlists()->where('product_id', $product->id)->exists() ? 'true' : 'false' }}">
-                        <svg class="w-5 h-5 wishlist-heart" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    <button 
+                        data-wishlist-button
+                        data-product-id="{{ $product->id }}"
+                        data-wishlist-url="{{ route('wishlist.toggle') }}"
+                        class="flex items-center space-x-2 px-4 py-2 rounded-lg border transition-all duration-200 {{ auth()->user()->wishlists()->where('product_id', $product->id)->exists() ? 'text-red-500 border-red-500 hover:bg-red-500/10' : 'text-gray-600 border-gray-300 hover:border-red-500 hover:text-red-500' }}"
+                        aria-label="{{ auth()->user()->wishlists()->where('product_id', $product->id)->exists() ? 'Remove from wishlist' : 'Add to wishlist' }}"
+                        title="{{ auth()->user()->wishlists()->where('product_id', $product->id)->exists() ? 'Remove from wishlist' : 'Add to wishlist' }}">
+                        <svg class="w-5 h-5" fill="{{ auth()->user()->wishlists()->where('product_id', $product->id)->exists() ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
-                        <span class="wishlist-text">Add to Wishlist</span>
+                        <span>{{ auth()->user()->wishlists()->where('product_id', $product->id)->exists() ? 'Remove from Wishlist' : 'Add to Wishlist' }}</span>
                     </button>
                 </div>
 
@@ -73,10 +78,10 @@
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         
-                        <div class="bg-gray-800 border border-gray-700 rounded-xl p-4">
-                            <label class="block text-sm font-medium text-gray-300 mb-3">Quantity</label>
+                        <div class="bg-white border border-gray-200 rounded-xl p-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Quantity</label>
                             <div class="flex items-center space-x-4">
-                                <select name="quantity" class="bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
+                                <select name="quantity" class="bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
                                     @for ($i = 1; $i <= min(10, $product->stock); $i++)
                                         <option value="{{ $i }}">{{ $i }}</option>
                                     @endfor
@@ -112,7 +117,7 @@
             @if($product->category)
                 <div class="flex items-center space-x-2 text-sm">
                     <span class="text-gray-400">Category:</span>
-                    <span class="bg-emerald-900/30 text-emerald-300 px-3 py-1 rounded-full border border-emerald-600">
+                    <span class="bg-emerald-600 text-emerald-300 px-3 py-1 rounded-full border border-emerald-600">
                         {{ $product->category->name }}
                     </span>
                 </div>
@@ -128,12 +133,15 @@
                 <div class="flex items-center space-x-2">
                     <div class="flex text-yellow-400">
                         @for($i = 1; $i <= 5; $i++)
-                            <svg class="w-5 h-5 {{ $i <= ($product->reviews->avg('rating') ?? 0) ? 'fill-current' : 'text-gray-600' }}" viewBox="0 0 20 20">
+                            <svg class="w-5 h-5 {{ $i <= round($product->average_rating) ? 'fill-current' : 'text-gray-600' }}" viewBox="0 0 20 20">
                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                             </svg>
                         @endfor
                     </div>
-                    <span class="text-gray-400">({{ $product->reviews->count() }} reviews)</span>
+                    <span class="text-gray-300">
+                        {{ number_format($product->average_rating, 1) }} 
+                        ({{ $product->total_reviews }} {{ Str::plural('review', $product->total_reviews) }})
+                    </span>
                 </div>
             </div>
 
@@ -169,9 +177,14 @@
             @endif
 
             @auth
-                <div class="border-t border-gray-600 pt-6">
-                    <h3 class="text-lg font-semibold text-white mb-4">Write a Review</h3>
-                    <form action="{{ route('reviews.store', $product) }}" method="POST" class="space-y-4">
+                @php
+                    $userReview = $product->reviews()->where('user_id', auth()->id())->first();
+                @endphp
+                
+                @if(!$userReview)
+                    <div class="border-t border-gray-600 pt-6">
+                        <h3 class="text-lg font-semibold text-white mb-4">Write a Review</h3>
+                        <form action="{{ route('reviews.store', $product) }}" method="POST" class="space-y-4">
                         @csrf
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Rating</label>
@@ -194,7 +207,28 @@
                             Submit Review
                         </button>
                     </form>
-                </div>
+                    </div>
+                @else
+                    <div class="border-t border-gray-600 pt-6">
+                        <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                            <h3 class="text-lg font-semibold text-white mb-2">Your Review</h3>
+                            <div class="flex items-center space-x-2 mb-2">
+                                <div class="flex text-yellow-400">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <svg class="w-4 h-4 {{ $i <= $userReview->rating ? 'fill-current' : 'text-gray-600' }}" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                    @endfor
+                                </div>
+                                <span class="text-gray-300">{{ $userReview->rating }}/5</span>
+                            </div>
+                            @if($userReview->comment)
+                                <p class="text-gray-300">{{ $userReview->comment }}</p>
+                            @endif
+                            <p class="text-sm text-gray-500 mt-2">You have already reviewed this product.</p>
+                        </div>
+                    </div>
+                @endif
             @endauth
         </div>
     </div>
@@ -214,7 +248,8 @@
                             @endphp
                             <img src="{{ $relatedImage }}" 
                                  class="w-full h-48 object-cover rounded-xl mb-3"
-                                 alt="{{ $relatedProduct->name }}">
+                                 alt="{{ $relatedProduct->name }}"
+                                 loading="lazy">
                             <h3 class="text-white font-medium mb-2">{{ $relatedProduct->name }}</h3>
                             <div class="text-emerald-400 font-bold">${{ number_format($relatedProduct->price, 2) }}</div>
                         </a>
@@ -224,91 +259,5 @@
         </div>
     @endif
 
-    <script>
-        // Interactive star rating
-        document.querySelectorAll('.star-rating').forEach(star => {
-            star.addEventListener('click', function() {
-                const rating = this.dataset.rating;
-                document.querySelector(`#star${rating}`).checked = true;
-                
-                // Update visual feedback
-                document.querySelectorAll('.star-rating').forEach((s, index) => {
-                    if (index < rating) {
-                        s.classList.add('text-yellow-400', 'fill-current');
-                        s.classList.remove('text-gray-600');
-                    } else {
-                        s.classList.remove('text-yellow-400', 'fill-current');
-                        s.classList.add('text-gray-600');
-                    }
-                });
-            });
-        });
-
-        // Wishlist functionality
-        function updateWishlistButton(productId, inWishlist) {
-            const button = document.getElementById(`wishlist-btn-${productId}`);
-            const heart = button.querySelector('.wishlist-heart');
-            const text = button.querySelector('.wishlist-text');
-            
-            if (inWishlist) {
-                button.className = 'flex items-center space-x-2 px-4 py-2 rounded-lg border border-red-500 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all duration-200 wishlist-button';
-                heart.setAttribute('fill', 'currentColor');
-                text.textContent = 'In Wishlist';
-            } else {
-                button.className = 'flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-600 text-gray-400 hover:border-red-500 hover:text-red-400 transition-all duration-200 wishlist-button';
-                heart.setAttribute('fill', 'none');
-                text.textContent = 'Add to Wishlist';
-            }
-        }
-
-        async function toggleWishlist(productId) {
-            try {
-                const response = await fetch('{{ route("wishlist.toggle") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({ product_id: productId })
-                });
-
-                const data = await response.json();
-                
-                if (data.success) {
-                    updateWishlistButton(productId, data.in_wishlist);
-                    
-                    // Show notification
-                    const notification = document.createElement('div');
-                    notification.className = 'fixed top-4 right-4 bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full opacity-0 transition-all duration-300';
-                    notification.textContent = data.message;
-                    document.body.appendChild(notification);
-                    
-                    setTimeout(() => {
-                        notification.classList.remove('translate-x-full', 'opacity-0');
-                    }, 100);
-                    
-                    setTimeout(() => {
-                        notification.classList.add('translate-x-full', 'opacity-0');
-                        setTimeout(() => notification.remove(), 300);
-                    }, 3000);
-                } else {
-                    alert(data.message || 'Something went wrong');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Something went wrong');
-            }
-        }
-
-        // Initialize wishlist button state on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const button = document.querySelector('.wishlist-button');
-            if (button) {
-                const productId = button.dataset.productId;
-                const inWishlist = button.dataset.inWishlist === 'true';
-                updateWishlistButton(productId, inWishlist);
-            }
-        });
-    </script>
 </x-layout>
 <x-footer />

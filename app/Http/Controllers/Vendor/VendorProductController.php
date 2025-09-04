@@ -39,7 +39,7 @@ class VendorProductController extends Controller
         $product->name = $request->name;
         $product->price = $request->price;
         $product->description = $request->description;
-        $product->image = $request->file('image')->store('products');
+        $product->image = $request->file('image')->store('products', 'public');
         $product->vendor_id = auth()->user()->id;
         $product->category_id = $request->category_id;
         $product->stock = $request->stock;
@@ -83,7 +83,11 @@ class VendorProductController extends Controller
         $product->price = $request->price;
         $product->description = $request->description;
         if ($request->hasFile('image')) {
-            $product->image = $request->file('image')->store('products');
+            // Delete old image if exists
+            if ($product->image && \Storage::disk('public')->exists($product->image)) {
+                \Storage::disk('public')->delete($product->image);
+            }
+            $product->image = $request->file('image')->store('products', 'public');
         }
         $product->category_id = $request->category_id;
         $product->stock = $request->stock;

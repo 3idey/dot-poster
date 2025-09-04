@@ -46,7 +46,7 @@ class CheckoutController extends Controller
                 'user_id' => $user->id,
                 'total_amount' => $total,
                 'status' => 'pending',
-                'shipping_address' => $user->address,
+                'shipping_address' => $user->shipping_address ?? request()->shipping_address,
                 'payment_method' => $validated['payment_method'],
                 'payment_status' => $validated['payment_method'] === 'cash' ? 'pending' : 'unpaid',
             ]);

@@ -104,21 +104,30 @@
                         <div class="space-y-6">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Product Image *</label>
-                                <div class="mt-2">
-                                    <div id="image-preview" class="hidden mb-4">
-                                        <img id="preview-img" src="" alt="Preview" class="w-full h-64 object-cover rounded-lg border-2 border-dashed border-gray-300">
-                                        <button type="button" id="remove-image" class="mt-2 text-sm text-red-600 hover:text-red-800">Remove image</button>
-                                    </div>
-                                    
-                                    <div id="upload-area" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors cursor-pointer">
-                                        <input type="file" name="image" id="image" class="hidden" accept="image/*" required>
-                                        <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                        <p class="text-gray-600 font-medium">Click to upload image</p>
-                                        <p class="text-gray-400 text-sm mt-1">PNG, JPG, GIF up to 2MB</p>
-                                    </div>
+                                <input type="file" name="image" id="image" accept="image/*" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all @error('image') border-red-500 @enderror" 
+                                    required onchange="previewImage(this)">
+                                <div id="image-preview" class="mt-4 hidden">
+                                    <img id="preview-img" src="#" alt="Preview" class="max-h-64 mx-auto rounded-lg border border-gray-200">
+                                    <button type="button" onclick="removeImage()" class="mt-2 text-red-600 text-sm hover:underline">Remove image</button>
                                 </div>
+                                <script>
+                                function previewImage(input) {
+                                    if (input.files && input.files[0]) {
+                                        const reader = new FileReader();
+                                        reader.onload = function(e) {
+                                            document.getElementById('preview-img').src = e.target.result;
+                                            document.getElementById('image-preview').classList.remove('hidden');
+                                        };
+                                        reader.readAsDataURL(input.files[0]);
+                                    }
+                                }
+                                
+                                function removeImage() {
+                                    document.getElementById('image').value = '';
+                                    document.getElementById('image-preview').classList.add('hidden');
+                                }
+                                </script>
                                 @error('image')
                                     <p class="text-red-500 text-sm mt-2 flex items-center">
                                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -159,57 +168,4 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const uploadArea = document.getElementById('upload-area');
-            const imageInput = document.getElementById('image');
-            const imagePreview = document.getElementById('image-preview');
-            const previewImg = document.getElementById('preview-img');
-            const removeBtn = document.getElementById('remove-image');
-
-            uploadArea.addEventListener('click', () => imageInput.click());
-
-            imageInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        previewImg.src = e.target.result;
-                        imagePreview.classList.remove('hidden');
-                        uploadArea.classList.add('hidden');
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            removeBtn.addEventListener('click', function() {
-                imageInput.value = '';
-                imagePreview.classList.add('hidden');
-                uploadArea.classList.remove('hidden');
-            });
-
-            // Drag and drop functionality
-            uploadArea.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                uploadArea.classList.add('border-blue-400', 'bg-blue-50');
-            });
-
-            uploadArea.addEventListener('dragleave', function(e) {
-                e.preventDefault();
-                uploadArea.classList.remove('border-blue-400', 'bg-blue-50');
-            });
-
-            uploadArea.addEventListener('drop', function(e) {
-                e.preventDefault();
-                uploadArea.classList.remove('border-blue-400', 'bg-blue-50');
-                
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    imageInput.files = files;
-                    const event = new Event('change', { bubbles: true });
-                    imageInput.dispatchEvent(event);
-                }
-            });
-        });
-    </script>
 @endsection

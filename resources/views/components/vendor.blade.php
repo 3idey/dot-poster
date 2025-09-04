@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Vendor Dashboard</title>
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css', 'resources/js/vendor.edit.js'])
 </head>
 
 <body class="bg-gray-50 text-gray-900 font-sans antialiased">

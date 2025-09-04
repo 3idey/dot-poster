@@ -13,10 +13,10 @@
     @else
         <div class="space-y-3 mb-6">
             @foreach ($items as $i)
-                <div class="flex items-center justify-between bg-gray-900 p-3 rounded-xl">
+                <div class="flex items-center justify-between bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
                     <div>
                         <div class="font-medium">{{ $i->product->name }}</div>
-                        <div class="text-sm text-gray-400">
+                        <div class="text-sm text-gray-600">
                             {{ $i->quantity }} × ${{ number_format($i->product->price, 2) }}
                         </div>
                     </div>
@@ -82,9 +82,9 @@
                 @else
                     <div class="bg-gray-800 border border-gray-700 rounded-xl p-6">
                         <h4 class="text-lg font-semibold text-white mb-2">Shipping Address</h4>
-                        <div class="text-gray-300 bg-gray-700 rounded-lg p-3">
-                            <span class="font-medium text-white">{{ $user->address }}</span>
-                        </div>
+                        <input type="text" name="shipping_address" value="{{ $user->address }}" 
+                               class="w-full rounded-lg px-4 py-3 bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
+                               placeholder="Enter your full shipping address" required>
                     </div>
                 @endif
             </div>
@@ -143,95 +143,18 @@
         </form>
 
         <script src="https://js.stripe.com/v3/"></script>
-        <script>
-            // Debug: Check if Stripe key is available
-            console.log('Stripe key:', '{{ config("services.stripe.key") }}');
-            
-            // Initialize Stripe only if key exists
-            let stripe = null;
-            let cardElement = null;
-            
-            const stripeKey = '{{ config("services.stripe.key") }}';
-            if (stripeKey && stripeKey !== '') {
-                try {
-                    stripe = Stripe(stripeKey);
-                    const elements = stripe.elements();
-                    cardElement = elements.create('card');
-                    cardElement.mount('#card-element');
-                    console.log('Stripe initialized successfully');
-                } catch (error) {
-                    console.error('Stripe initialization error:', error);
-                }
-            } else {
-                console.error('Stripe key not configured');
-            }
-
-            const form = document.getElementById('checkout-form');
-            const submitButton = document.getElementById('submit-button');
-            const buttonText = document.getElementById('button-text');
-            const spinner = document.getElementById('spinner');
-            const stripeSection = document.getElementById('stripe-section');
-            const paymentMethodInput = document.getElementById('selected_payment_method');
-
-            // Debug: Check if elements exist
-            console.log('Form found:', !!form);
-            console.log('Stripe section found:', !!stripeSection);
-            console.log('Radio buttons found:', document.querySelectorAll('input[name="payment_method_radio"]').length);
-
-            // Handle payment method selection
-            document.querySelectorAll('input[name="payment_method_radio"]').forEach(radio => {
-                radio.addEventListener('change', function() {
-                    console.log('Payment method changed to:', this.value);
-                    paymentMethodInput.value = this.value;
-                    if (this.value === 'stripe') {
-                        console.log('Showing Stripe section');
-                        stripeSection.classList.remove('hidden');
-                        buttonText.textContent = 'Pay ${{ number_format($total, 2) }}';
-                    } else {
-                        console.log('Hiding Stripe section');
-                        stripeSection.classList.add('hidden');
-                        buttonText.textContent = 'Place Order (COD)';
+        @push('scripts')
+            <script>
+                // Initialize Stripe payment handling
+                document.addEventListener('DOMContentLoaded', () => {
+                    const checkoutForm = document.getElementById('checkout-form');
+                    if (checkoutForm) {
+                        checkoutForm.dataset.stripeKey = '{{ config("services.stripe.key") }}';
+                        checkoutForm.dataset.total = '{{ $total }}';
                     }
                 });
-            });
-
-            // Test function to manually show Stripe section
-            function testStripeSection() {
-                const section = document.getElementById('stripe-section');
-                if (section.classList.contains('hidden')) {
-                    section.classList.remove('hidden');
-                    console.log('Stripe section shown manually');
-                } else {
-                    section.classList.add('hidden');
-                    console.log('Stripe section hidden manually');
-                }
-            }
-
-            // Handle form submission
-            form.addEventListener('submit', async (event) => {
-                event.preventDefault();
-
-                if (paymentMethodInput.value === 'stripe') {
-                    submitButton.disabled = true;
-                    buttonText.classList.add('hidden');
-                    spinner.classList.remove('hidden');
-
-                    const {token, error} = await stripe.createToken(cardElement);
-
-                    if (error) {
-                        document.getElementById('card-errors').textContent = error.message;
-                        submitButton.disabled = false;
-                        buttonText.classList.remove('hidden');
-                        spinner.classList.add('hidden');
-                    } else {
-                        document.getElementById('payment_method_id').value = token.id;
-                        form.submit();
-                    }
-                } else {
-                    form.submit();
-                }
-            });
-        </script>
+            </script>
+        @endpush
     @endif
 </x-layout>
 <x-footer />

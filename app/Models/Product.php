@@ -103,4 +103,25 @@ class Product extends Model
     {
         return $this->belongsTo(User::class, 'vendor_id');
     }
+
+    // Rating calculation methods
+    public function getAverageRatingAttribute()
+    {
+        return $this->reviews()->avg('rating') ?? 0;
+    }
+
+    public function getTotalReviewsAttribute()
+    {
+        return $this->reviews()->count();
+    }
+
+    public function getRatingDistributionAttribute()
+    {
+        $distribution = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $distribution[$i] = $this->reviews()->where('rating', $i)->count();
+        }
+
+        return $distribution;
+    }
 }

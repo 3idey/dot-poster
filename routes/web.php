@@ -14,6 +14,9 @@ Route::get('/', fn () => to_route('products.index'))->name('home');
 Route::get('/about', function () {
     return view('about');
 });
+Route::get('/contact', function () {
+    return view('contact');
+});
 Route::get('/login', [LoginController::class, 'create'])->middleware('guest')->name('login.create');
 Route::post('/login', [LoginController::class, 'store'])->middleware(['guest', 'throttle:5,1'])->name('login');
 Route::delete('/logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');

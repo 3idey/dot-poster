@@ -3,8 +3,6 @@
 @section('content')
     <h1 class="text-2xl font-bold mb-6">Products Management</h1>
 
-    <a href="{{ route('admin.products.create') }}" class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-4 py-2 rounded-xl hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">+ Add Product</a>
-
     <table class="w-full bg-white shadow-md rounded-lg mt-4">
         <thead>
             <tr class="bg-gray-200 text-left">
