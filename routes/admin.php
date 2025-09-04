@@ -8,7 +8,41 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/dashboard', function () {
-        return view('admin.dashboard');
+        $totalRevenue = \App\Models\Order::where('status', '!=', 'cancelled')->sum('total_amount');
+        $totalOrders = \App\Models\Order::count();
+        $pendingOrders = \App\Models\Order::where('status', 'pending')->count();
+        $totalProducts = \App\Models\Product::count();
+        $lowStockProducts = \App\Models\Product::where('stock', '<=', 5)->count();
+        $totalUsers = \App\Models\User::where('role', 'customer')->count();
+        $newUsersThisMonth = \App\Models\User::where('role', 'customer')
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+        $totalCategories = \App\Models\Category::count();
+        
+        $recentOrders = \App\Models\Order::with('user')
+            ->latest()
+            ->take(5)
+            ->get();
+            
+        $lowStockItems = \App\Models\Product::with('category')
+            ->where('stock', '<=', 5)
+            ->orderBy('stock', 'asc')
+            ->take(5)
+            ->get();
+
+        return view('admin.dashboard', compact(
+            'totalRevenue',
+            'totalOrders', 
+            'pendingOrders',
+            'totalProducts',
+            'lowStockProducts',
+            'totalUsers',
+            'newUsersThisMonth',
+            'totalCategories',
+            'recentOrders',
+            'lowStockItems'
+        ));
     })->name('dashboard');
 
     // Users

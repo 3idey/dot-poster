@@ -73,7 +73,51 @@
         <!-- Main content -->
         <main class="flex-1 lg:ml-64 p-4 md:p-6 lg:p-8 overflow-y-auto w-full bg-gray-50 min-h-screen">
             {{ $slot ?? '' }}
+            
+            <!-- Newsletter Subscription Section -->
+            @if (auth()->guest() || !auth()->user()->isSubscribed()) 
+            <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 py-12 mt-16 -mx-4 md:-mx-6 lg:-mx-8">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h2 class="text-3xl font-bold text-white mb-4">Stay Updated with New Posters</h2>
+                    <p class="text-emerald-100 text-lg mb-8">Subscribe to our newsletter and be the first to know about new arrivals, exclusive offers, and special collections.</p>
+                    
+                    <form id="newsletter-form" class="max-w-md mx-auto">
+                        @csrf
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <input type="email" 
+                                   id="newsletter-email" 
+                                   name="email" 
+                                   placeholder="Enter your email address" 
+                                   required
+                                   class="flex-1 px-4 py-3 rounded-lg border border-emerald-300 focus:ring-2 focus:ring-white focus:border-transparent text-gray-900 placeholder-gray-500">
+                            <button type="submit" 
+                                    id="newsletter-submit"
+                                    class="px-8 py-3 bg-white text-emerald-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-emerald-600">
+                                Subscribe
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div id="newsletter-message" class="mt-4 hidden">
+                        <div id="newsletter-success" class="text-white bg-emerald-800 bg-opacity-50 px-4 py-2 rounded-lg hidden">
+                            <svg class="w-5 h-5 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span id="newsletter-success-text"></span>
+                        </div>
+                        <div id="newsletter-error" class="text-white bg-red-600 bg-opacity-50 px-4 py-2 rounded-lg hidden">
+                            <svg class="w-5 h-5 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span id="newsletter-error-text"></span>
+                        </div>
+                    </div>
+                    
+                    <p class="text-emerald-200 text-sm mt-4">We respect your privacy. Unsubscribe at any time.</p>
+                </div>
+            </div>
         </main>
+        @endif
     </div>
         <!-- Mobile menu button -->
         <div class="lg:hidden fixed bottom-4 right-4 z-50">
@@ -157,3 +201,4 @@
             </nav>
         </div>
     </div>
+@endsection

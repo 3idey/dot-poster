@@ -115,4 +115,10 @@ class User extends Authenticatable
         // Otherwise, it's a local file
         return asset('storage/'.$this->avatar);
     }
+    public function isSubscribed()
+    {
+        return \App\Models\Newsletter::where('email', $this->email)
+            ->where('is_active', true)
+            ->exists();
+    }
 }

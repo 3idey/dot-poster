@@ -1,10 +1,9 @@
 import './bootstrap';
 import { ImageUploader } from './modules/features/imageUploader.js';
 import { MobileSidebar } from './modules/features/mobileSidebar.js';
-import { Wishlist } from './modules/features/wishlist.js';
-import { StripePayment } from './modules/features/stripePayment.js';
 import { ImagePreview } from './modules/features/imagePreview.js';
 import { StarRating } from './modules/features/starRating.js';
+import { Newsletter } from './modules/features/newsletter.js';
 
 // Initialize when DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
@@ -47,6 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Star Rating if rating elements exist
     if (document.querySelector('.star-rating')) {
+        console.log('Initializing StarRating...');
         new StarRating();
+    }
+
+    // Initialize Newsletter subscription
+    if (document.getElementById('newsletter-form')) {
+        console.log('Initializing Newsletter...');
+        new Newsletter();
     }
 });
