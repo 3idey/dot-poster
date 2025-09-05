@@ -1,19 +1,22 @@
 # Dot-Poster E-commerce Platform
 
-A modern, full-featured e-commerce platform built with Laravel 12 for selling posters and artwork online.
+A modern, full-featured e-commerce platform built with Laravel 12 for selling posters and artwork online. Features a beautiful, responsive design with professional UI/UX and comprehensive e-commerce functionality.
 
-## Features
+## ✨ Features
 
 ### **Customer Features**
-- **Product Catalog** - Browse posters with high-quality image galleries and thumbnails
-- **Advanced Search** - Search by name, category, price range with sorting options
-- **Shopping Cart** - Add/remove items, quantity management with real-time updates
-- **Secure Checkout** - Stripe payment integration + cash on delivery options
-- **Order Tracking** - View order history and real-time status updates
-- **Product Reviews** - Interactive star ratings and detailed review system
-- **User Profiles** - Manage personal information, addresses, and avatar uploads
+- **Product Catalog** - Browse posters with high-quality image galleries and interactive thumbnails
+- **Advanced Search & Filtering** - Search by name, category, price range with dynamic sorting options
+- **Smart Shopping Cart** - Modern cart interface with quantity management and real-time updates
+- **Wishlist System** - Save favorite products with visual indicators and easy management
+- **Secure Checkout** - Professional Stripe payment integration + cash on delivery options
+- **Saved Payment Methods** - Secure payment method storage for faster checkout
+- **Order Tracking** - Comprehensive order history with real-time status updates
+- **Product Reviews** - Interactive 5-star rating system with detailed review functionality
+- **User Profiles** - Complete profile management with avatar uploads and personal information
 - **Email Notifications** - Automated order confirmations and status update emails
 - **Google Sign-In** - OAuth authentication with Google accounts for seamless login
+- **Newsletter Subscription** - Stay updated with new arrivals and exclusive offers
 
 ### **Admin Features**
 - **Product Management** - Full CRUD with multiple image uploads and gallery management
@@ -30,6 +33,14 @@ A modern, full-featured e-commerce platform built with Laravel 12 for selling po
 - **Inventory Control** - Manage stock levels and product availability
 - **Sales Analytics** - View vendor-specific order and product performance
 
+### **UI/UX & Design**
+- **Modern Interface** - Clean, professional design with consistent color scheme
+- **Responsive Layout** - Mobile-first design that works perfectly on all devices
+- **Interactive Elements** - Smooth animations, hover effects, and visual feedback
+- **Accessibility** - Proper contrast ratios and keyboard navigation support
+- **Professional Navigation** - Intuitive sidebar with active state indicators and badge counters
+- **Visual Consistency** - Unified design system across all pages and components
+
 ### **Security & Performance**
 - Role-based access control (Customer/Admin/Vendor)
 - Rate limiting on authentication
@@ -37,6 +48,7 @@ A modern, full-featured e-commerce platform built with Laravel 12 for selling po
 - CSRF protection on all forms
 - Input sanitization and validation
 - OAuth integration with Google Sign-In
+- Secure payment method storage with Stripe
 
 ## Quick Start
 
@@ -93,24 +105,29 @@ This runs the Laravel server, queue worker, logs, and Vite concurrently.
 ### Models
 - **User** - Customer, admin, and vendor accounts with role-based access and Google OAuth support
 - **Product** - Poster products with multiple images, pricing, stock, vendor assignment
-- **ProductImage** - Multiple image support with gallery functionality
-- **Category** - Hierarchical product categorization
-- **Order/OrderItem** - Complete order management and line items
-- **CartItem** - Shopping cart functionality with quantity management
-- **Review** - Product reviews and star ratings system
-- **Payment** - Stripe and cash payment transaction records
+- **ProductImage** - Multiple image support with gallery functionality and lazy loading
+- **Category** - Hierarchical product categorization with nested structures
+- **Order/OrderItem** - Complete order management and line items with status tracking
+- **CartItem** - Shopping cart functionality with quantity management and real-time updates
+- **Wishlist** - User wishlist system for saving favorite products
+- **Review** - Product reviews and interactive star ratings system
+- **Payment** - Stripe and cash payment transaction records with secure storage
+- **SavedPaymentMethod** - Secure storage of customer payment methods for faster checkout
+- **Newsletter** - Email subscription management for marketing campaigns
 
 ### Key Controllers
-- **ProductController** - Public product browsing with advanced search/filter
-- **CartController** - Shopping cart management with AJAX updates
-- **CheckoutController** - Order processing with Stripe and cash payment options
+- **ProductController** - Public product browsing with advanced search/filter and image galleries
+- **CartController** - Modern shopping cart management with AJAX updates and quantity controls
+- **WishlistController** - Wishlist functionality with add/remove and visual indicators
+- **CheckoutController** - Professional checkout flow with Stripe and cash payment options
+- **SavedPaymentMethodController** - Secure payment method management for faster checkout
 - **GoogleSigninController** - Google OAuth authentication and user management
-- **ProfileController** - User profile management with OAuth support
-- **Admin/AdminProductController** - Product CRUD with multiple image uploads
-- **Admin/AdminCategoryController** - Category management with hierarchy
-- **Admin/AdminOrderController** - Order status management with email notifications
-- **Vendor/VendorProductController** - Vendor-specific product management
-- **Vendor/VendorOrderController** - Vendor order fulfillment and tracking
+- **ProfileController** - Comprehensive user profile management with OAuth support
+- **Admin/AdminProductController** - Product CRUD with multiple image uploads and gallery management
+- **Admin/AdminCategoryController** - Category management with hierarchical organization
+- **Admin/AdminOrderController** - Order status management with automated email notifications
+- **Vendor/VendorProductController** - Vendor-specific product management with image handling
+- **Vendor/VendorOrderController** - Vendor order fulfillment and tracking system
 
 ### Email System
 - **OrderConfirmation** - Automated email sent on order placement
@@ -120,12 +137,14 @@ This runs the Laravel server, queue worker, logs, and Vite concurrently.
 ## Usage
 
 ### For Customers
-1. Browse products at `/products`
-2. Register/login with email or Google Sign-In
-3. Add items to cart
-4. Checkout with Stripe or cash payment
-5. Track orders in profile
-6. Leave reviews on purchased items
+1. Browse products at `/products` with advanced filtering and search
+2. Register/login with email or Google Sign-In for seamless access
+3. Add items to cart and wishlist for later purchase
+4. Save payment methods for faster future checkouts
+5. Complete secure checkout with Stripe or cash on delivery
+6. Track order status and history in your profile
+7. Leave detailed reviews and star ratings on purchased items
+8. Subscribe to newsletter for exclusive offers and updates
 
 ### For Admins
 1. Access admin panel at `/admin/dashboard`
@@ -176,11 +195,13 @@ GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 ```
 
-### File Storage
-- Product images stored in `storage/app/public/products/`
-- Multiple images per product supported via ProductImage model
+### File Storage & Assets
+- Product images stored in `storage/app/public/products/` with proper permissions
+- Multiple images per product supported via ProductImage model with gallery functionality
 - Automatic fallback to placeholder.svg for missing images
-- Images accessible via `/storage/products/` URL
+- Images accessible via `/storage/products/` URL with lazy loading
+- Frontend assets compiled with Vite for optimal performance
+- Responsive image handling with proper optimization
 
 ## Development
 

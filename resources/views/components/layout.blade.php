@@ -3,10 +3,10 @@
 @section('content')
 <div class="flex h-screen bg-gray-50">
     <!-- Desktop Sidebar -->
-    <nav class="hidden lg:flex lg:flex-col lg:w-64 bg-slate-800 text-white items-center py-8 space-y-6 fixed left-0 top-0 h-full shadow-xl z-40 border-r border-slate-700">
+    <nav class="hidden lg:flex lg:flex-col lg:w-64 bg-white text-gray-900 items-center py-8 space-y-6 fixed left-0 top-0 h-full shadow-xl z-40 border-r border-gray-200">
         <!-- Logo -->
         <a href="/" class="flex items-center space-x-3 px-4 mb-6">
-            <img src="{{ Vite::asset('resources/images/whitelogo.png') }}" alt="Dot Poster Logo"
+            <img src="{{ Vite::asset('resources/images/fulllogo.png') }}" alt="Dot Poster Logo"
                 class="w-[55px] h-[55px] object-contain hover:scale-110 transition-transform duration-300 ease-in-out"
                 loading="eager">
         </a>
@@ -26,9 +26,21 @@
                             @endif
                         </x-sidelink>
                     </li>
+                    <li class="relative">
+                        <x-sidelink link="{{ route('wishlist.index') }}">
+                            Wishlist
+                            @if (auth()->user()->wishlists()->count() > 0)
+                                <span class="ml-2 bg-purple-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                                    {{ auth()->user()->wishlists()->count() }}
+                                </span>
+                            @endif
+                        </x-sidelink>
+                    </li>
 
                     {{-- Normal user links --}}
                     <li><x-sidelink link="{{ route('profile.show') }}">Profile</x-sidelink></li>
+                    <li><x-sidelink link="{{ route('profile.saved-payment-methods.index') }}">Payment Methods</x-sidelink></li>
+                    <li><x-sidelink link="{{ route('orders.index') }}">My Orders</x-sidelink></li>
 
                     {{-- Only show if admin --}}
                     @if (auth()->user()->isAdmin())
@@ -44,6 +56,9 @@
                 @guest
                     <li>
                         <x-sidelink link="{{ route('login') }}">Cart</x-sidelink>
+                    </li>
+                    <li>
+                        <x-sidelink link="{{ route('login') }}">Wishlist</x-sidelink>
                     </li>
                 @endguest
                 <li><x-sidelink link="/contact">Contact</x-sidelink></li>
@@ -62,9 +77,9 @@
                         </button>
                     </form>
                 @else
-                    <div class="ml-4 flex justify-between space-x-6">
-                        <x-button name="Login" href="/login" />
-                        <x-button name="Register" href="/register" />
+                    <div class="flex flex-col space-y-3">
+                        <x-button name="Login" href="{{ route('login') }}" class="w-full text-center justify-center" />
+                        <x-button name="Register" href="{{ route('register') }}" variant="outline" class="w-full text-center justify-center" />
                     </div>
                 @endauth
             </div>
@@ -135,16 +150,16 @@
     </div>
     
     <!-- Mobile sidebar -->
-    <div id="mobile-sidebar" class="lg:hidden fixed inset-y-0 left-0 transform -translate-x-full w-64 bg-slate-800 text-white z-50 transition-transform duration-300 ease-in-out overflow-y-auto border-r border-slate-700">
+    <div id="mobile-sidebar" class="lg:hidden fixed inset-y-0 left-0 transform -translate-x-full w-64 bg-white text-gray-900 z-50 transition-transform duration-300 ease-in-out overflow-y-auto border-r border-gray-200">
         <div class="p-4">
             <!-- Logo -->
-            <div class="flex items-center justify-between p-4 border-b border-slate-700">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200">
                 <a href="/" class="flex items-center space-x-2">
-                    <img src="{{ Vite::asset('resources/images/whitelogo.png') }}" alt="Dot Poster Logo" class="h-10 w-auto object-contain"
+                    <img src="{{ Vite::asset('resources/images/fulllogo.png') }}" alt="Dot Poster Logo" class="h-10 w-auto object-contain"
                          loading="eager">
-                    <span class="text-xl font-bold">Dot Poster</span>
+                    <span class="text-xl font-bold text-gray-900">Dot Poster</span>
                 </a>
-                <button id="close-mobile-sidebar" class="text-gray-400 hover:text-white focus:outline-none">
+                <button id="close-mobile-sidebar" class="text-gray-400 hover:text-gray-600 focus:outline-none">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -167,7 +182,19 @@
                                 @endif
                             </x-sidelink>
                         </li>
+                        <li class="relative">
+                            <x-sidelink link="{{ route('wishlist.index') }}">
+                                Wishlist
+                                @if (auth()->user()->wishlists()->count() > 0)
+                                    <span class="ml-2 bg-purple-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                                        {{ auth()->user()->wishlists()->count() }}
+                                    </span>
+                                @endif
+                            </x-sidelink>
+                        </li>
                         <li><x-sidelink link="{{ route('profile.show') }}">Profile</x-sidelink></li>
+                        <li><x-sidelink link="{{ route('profile.saved-payment-methods.index') }}">Payment Methods</x-sidelink></li>
+                        <li><x-sidelink link="{{ route('orders.index') }}">My Orders</x-sidelink></li>
                         @if (auth()->user()->isAdmin())
                             <li><x-sidelink link="{{ route('admin.dashboard') }}">Admin Dashboard</x-sidelink></li>
                         @endif
@@ -176,13 +203,14 @@
                         @endif
                     @else
                         <li><x-sidelink link="{{ route('login') }}">Cart</x-sidelink></li>
+                        <li><x-sidelink link="{{ route('login') }}">Wishlist</x-sidelink></li>
                     @endauth
                     <li><x-sidelink link="/contact">Contact</x-sidelink></li>
                     <li><x-sidelink link="/about">About</x-sidelink></li>
                 </ul>
                 
                 @auth
-                    <div class="mt-6 pt-6 border-t border-slate-700">
+                    <div class="mt-6 pt-6 border-t border-gray-200">
                         <form method="POST" action="/logout">
                             @csrf
                             @method('DELETE')
@@ -193,7 +221,7 @@
                         </form>
                     </div>
                 @else
-                    <div class="mt-6 pt-6 border-t border-slate-700 space-y-3">
+                    <div class="mt-6 pt-6 border-t border-gray-200 space-y-3">
                         <x-button name="Login" href="{{ route('login') }}" class="w-full text-center justify-center" />
                         <x-button name="Register" href="{{ route('register') }}" variant="outline" class="w-full text-center justify-center" />
                     </div>

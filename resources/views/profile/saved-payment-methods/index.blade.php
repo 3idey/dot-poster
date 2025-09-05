@@ -1,21 +1,21 @@
 <x-header title="Saved Payment Methods" />
 
 <x-layout>
-<div class="min-h-screen bg-gray-900 py-8">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Header -->
-        <div class="mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-white">Saved Payment Methods</h1>
-                    <p class="mt-2 text-gray-400">Manage your saved cards for faster checkout</p>
-                </div>
-                <a href="{{ route('profile.show') }}" class="inline-flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg>
-                    Back to Profile
-                </a>
+    <div class="min-h-screen bg-gray-50 py-8">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">Saved Payment Methods</h1>
+                        <p class="mt-2 text-gray-600">Manage your saved cards for faster checkout</p>
+                    </div>
+                    <a href="{{ route('profile.show') }}" class="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        Back to Profile
+                    </a>
             </div>
         </div>
 
@@ -23,7 +23,7 @@
             <!-- Payment Methods Grid -->
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 @foreach($savedPaymentMethods as $method)
-                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 hover:border-gray-600 transition-colors" data-payment-method-id="{{ $method->id }}">
+                    <div class="bg-white rounded-xl border border-gray-200 p-6 hover:border-gray-300 transition-colors shadow-sm" data-payment-method-id="{{ $method->id }}">
                         <!-- Card Header -->
                         <div class="flex items-start justify-between mb-4">
                             <div class="flex items-center space-x-3">
@@ -32,8 +32,8 @@
                                     <span class="text-white text-xs font-bold">{{ strtoupper(substr($method->brand ?? 'CARD', 0, 4)) }}</span>
                                 </div>
                                 <div>
-                                    <h3 class="text-white font-semibold">{{ $method->display_name }}</h3>
-                                    <p class="text-sm text-gray-400">•••• •••• •••• {{ $method->last_four }}</p>
+                                    <h3 class="text-gray-900 font-semibold">{{ $method->display_name }}</h3>
+                                    <p class="text-sm text-gray-600">•••• •••• •••• {{ $method->last_four }}</p>
                                 </div>
                             </div>
                             
@@ -48,11 +48,11 @@
                         <!-- Card Details -->
                         <div class="space-y-2 mb-6">
                             <div class="flex justify-between text-sm">
-                                <span class="text-gray-400">Expires</span>
-                                <span class="text-white">{{ str_pad($method->exp_month, 2, '0', STR_PAD_LEFT) }}/{{ $method->exp_year }}</span>
+                                <span class="text-gray-600">Expires</span>
+                                <span class="text-gray-900">{{ str_pad($method->exp_month, 2, '0', STR_PAD_LEFT) }}/{{ $method->exp_year }}</span>
                             </div>
                             @if($method->is_expired)
-                                <div class="flex items-center text-red-400 text-sm">
+                                <div class="flex items-center text-red-500 text-sm">
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                                     </svg>
@@ -68,7 +68,7 @@
                                     Set Default
                                 </button>
                             @endif
-                            <button onclick="editPaymentMethod({{ $method->id }}, '{{ $method->nickname }}')" class="flex-1 px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition-colors">
+                            <button onclick="editPaymentMethod({{ $method->id }}, '{{ $method->nickname }}')" class="flex-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-900 text-sm rounded-lg transition-colors">
                                 Edit
                             </button>
                             <button onclick="deletePaymentMethod({{ $method->id }})" class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg transition-colors">
@@ -83,13 +83,13 @@
         @else
             <!-- Empty State -->
             <div class="text-center py-12">
-                <div class="w-24 h-24 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-12 h-12 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                     </svg>
                 </div>
-                <h3 class="text-xl font-semibold text-white mb-2">No Saved Payment Methods</h3>
-                <p class="text-gray-400 mb-6">You haven't saved any payment methods yet. Save a card during checkout for faster future purchases.</p>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">No Saved Payment Methods</h3>
+                <p class="text-gray-600 mb-6">You haven't saved any payment methods yet. Save a card during checkout for faster future purchases.</p>
                 <a href="{{ route('products.index') }}" class="inline-flex items-center px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
@@ -104,10 +104,10 @@
 <!-- Edit Payment Method Modal -->
 <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
     <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-gray-800 rounded-xl max-w-md w-full p-6">
+        <div class="bg-white rounded-xl max-w-md w-full p-6">
             <div class="flex items-center justify-between mb-6">
-                <h3 class="text-xl font-semibold text-white">Edit Payment Method</h3>
-                <button onclick="closeEditModal()" class="text-gray-400 hover:text-white">
+                <h3 class="text-xl font-semibold text-gray-900">Edit Payment Method</h3>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -116,13 +116,13 @@
             
             <form id="editForm">
                 <div class="mb-4">
-                    <label for="nickname" class="block text-sm font-medium text-gray-300 mb-2">Nickname</label>
+                    <label for="nickname" class="block text-sm font-medium text-gray-700 mb-2">Nickname</label>
                     <input type="text" id="nickname" name="nickname" placeholder="e.g., Personal Card, Work Card" 
-                           class="w-full rounded-lg px-3 py-2 bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
+                           class="w-full rounded-lg px-3 py-2 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
                 </div>
                 
                 <div class="flex space-x-3">
-                    <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors">
+                    <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-lg transition-colors">
                         Cancel
                     </button>
                     <button type="submit" class="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors">
