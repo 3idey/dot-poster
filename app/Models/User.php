@@ -121,4 +121,14 @@ class User extends Authenticatable
             ->where('is_active', true)
             ->exists();
     }
+
+    public function savedPaymentMethods()
+    {
+        return $this->hasMany(SavedPaymentMethod::class);
+    }
+
+    public function getDefaultPaymentMethodAttribute()
+    {
+        return $this->savedPaymentMethods()->where('is_default', true)->first();
+    }
 }

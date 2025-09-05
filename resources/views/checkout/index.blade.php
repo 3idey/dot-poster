@@ -68,6 +68,41 @@
                         </div>
                     </label>
                 </div>
+
+                <!-- Saved Payment Methods -->
+                @if($savedPaymentMethods->count() > 0)
+                    <div class="mt-6">
+                        <h4 class="text-lg font-semibold mb-3 text-white">Or use a saved payment method</h4>
+                        <div class="space-y-3">
+                            @foreach($savedPaymentMethods as $savedMethod)
+                                <label class="relative cursor-pointer payment-method-label" data-payment="saved" data-saved-id="{{ $savedMethod->id }}">
+                                    <input type="radio" name="payment_method_radio" value="saved" class="sr-only">
+                                    <div class="bg-gray-800 border-2 border-gray-700 rounded-xl p-4 transition-all hover:border-gray-600 payment-method-card">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-5 h-5 rounded-full border-2 border-gray-400 relative payment-radio">
+                                                    <div class="absolute inset-1 rounded-full bg-white scale-0 transition-transform"></div>
+                                                </div>
+                                                <div class="flex items-center space-x-3">
+                                                    <div class="w-10 h-6 bg-gradient-to-r {{ $savedMethod->brand === 'visa' ? 'from-blue-600 to-blue-700' : ($savedMethod->brand === 'mastercard' ? 'from-red-500 to-orange-500' : 'from-gray-600 to-gray-700') }} rounded flex items-center justify-center">
+                                                        <span class="text-white text-xs font-bold">{{ strtoupper(substr($savedMethod->brand, 0, 4)) }}</span>
+                                                    </div>
+                                                    <div>
+                                                        <div class="font-semibold text-white">{{ $savedMethod->display_name }}</div>
+                                                        <div class="text-sm text-gray-400">Expires {{ $savedMethod->exp_month }}/{{ $savedMethod->exp_year }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if($savedMethod->is_default)
+                                                <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded-full text-xs font-semibold">Default</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </div>
 
             <!-- Shipping Address Section -->
@@ -129,6 +164,21 @@
                         </div>
                         
                         <div id="card-errors" role="alert" class="text-red-400 text-sm mt-4 min-h-[20px] font-medium"></div>
+                        
+                        <!-- Save Payment Method Option -->
+                        <div class="mt-6 p-4 bg-gray-700/50 rounded-lg border border-gray-600">
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" name="save_payment_method" value="1" class="w-4 h-4 text-emerald-600 bg-gray-700 border-gray-600 rounded focus:ring-emerald-500 focus:ring-2">
+                                <div>
+                                    <span class="text-white font-medium">Save this payment method</span>
+                                    <p class="text-sm text-gray-400">Securely save for faster checkout next time</p>
+                                </div>
+                            </label>
+                            <div class="mt-3 hidden" id="payment-nickname-section">
+                                <input type="text" name="payment_nickname" placeholder="Give this card a nickname (optional)" 
+                                       class="w-full rounded-lg px-3 py-2 bg-gray-600 border border-gray-500 text-white placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors text-sm">
+                            </div>
+                        </div>
                         
                         <div class="mt-6 flex items-center justify-between">
                             <div class="flex items-center text-sm text-gray-400">

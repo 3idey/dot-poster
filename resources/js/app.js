@@ -3,12 +3,11 @@ import { ImageUploader } from './modules/features/imageUploader.js';
 import { MobileSidebar } from './modules/features/mobileSidebar.js';
 import { ImagePreview } from './modules/features/imagePreview.js';
 import { StarRating } from './modules/features/starRating.js';
-import { Newsletter } from './modules/features/newsletter.js';
 import { Wishlist } from './modules/features/wishlist.js';
 import { StripePayment } from './modules/features/stripePayment.js';
+import { SavedPaymentMethods } from './modules/features/savedPaymentMethods.js';
 
-// Initialize when DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     // Initialize Image Uploader if the required elements exist
     if (document.getElementById('upload-area') && document.getElementById('image')) {
         console.log('Initializing ImageUploader...');
@@ -50,6 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('.star-rating')) {
         console.log('Initializing StarRating...');
         new StarRating();
+    }
+
+    // Initialize saved payment methods functionality
+    if (document.querySelector('[data-payment-method-id]')) {
+        new SavedPaymentMethods();
     }
 
     // Initialize Newsletter subscription

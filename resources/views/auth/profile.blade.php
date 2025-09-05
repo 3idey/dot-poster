@@ -23,7 +23,7 @@
         </div>
 
         {{-- Quick Actions --}}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <a href="{{ route('wishlist.index') }}" class="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
                 <div class="flex items-center space-x-3">
                     <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -44,6 +44,18 @@
                     <div>
                         <h4 class="font-semibold">Shopping Cart</h4>
                         <p class="text-sm opacity-80">{{ auth()->user()->cartItems()->count() }} items</p>
+                    </div>
+                </div>
+            </a>
+
+            <a href="{{ route('profile.saved-payment-methods.index') }}" class="bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                <div class="flex items-center space-x-3">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                    </svg>
+                    <div>
+                        <h4 class="font-semibold">Payment Methods</h4>
+                        <p class="text-sm opacity-80">{{ auth()->user()->savedPaymentMethods()->active()->count() }} saved</p>
                     </div>
                 </div>
             </a>

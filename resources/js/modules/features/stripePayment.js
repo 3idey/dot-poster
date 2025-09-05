@@ -50,17 +50,43 @@ export class StripePayment {
         paymentLabels.forEach(label => {
             label.addEventListener('click', (e) => {
                 const paymentMethod = label.dataset.payment;
+                const savedId = label.dataset.savedId;
                 const radio = label.querySelector('input[type="radio"]');
                 
                 // Update radio selection
                 document.querySelectorAll('input[name="payment_method_radio"]').forEach(r => r.checked = false);
                 radio.checked = true;
                 
+                // Update hidden form fields
+                if (paymentMethod === 'saved' && savedId) {
+                    document.getElementById('selected_payment_method').value = 'saved';
+                    document.getElementById('payment_method_id').value = savedId;
+                } else {
+                    document.getElementById('selected_payment_method').value = paymentMethod;
+                    if (paymentMethod !== 'stripe') {
+                        document.getElementById('payment_method_id').value = '';
+                    }
+                }
+                
                 // Update visual state
                 this.updatePaymentMethodVisuals(paymentMethod);
-                this.handlePaymentMethodChange(paymentMethod);
+                this.handlePaymentMethodChange(paymentMethod, savedId);
             });
         });
+        
+        // Handle save payment method checkbox
+        const saveCheckbox = document.querySelector('input[name="save_payment_method"]');
+        const nicknameSection = document.getElementById('payment-nickname-section');
+        
+        if (saveCheckbox && nicknameSection) {
+            saveCheckbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    nicknameSection.classList.remove('hidden');
+                } else {
+                    nicknameSection.classList.add('hidden');
+                }
+            });
+        }
     }
 
     updatePaymentMethodVisuals(selectedMethod) {
@@ -90,8 +116,16 @@ export class StripePayment {
         });
     }
 
-    handlePaymentMethodChange(paymentMethod) {
+    handlePaymentMethodChange(paymentMethod, savedId = null) {
         this.paymentMethodInput.value = paymentMethod;
+        
+        // Update payment method ID if using saved payment method
+        if (paymentMethod === 'saved' && savedId) {
+            const paymentMethodIdInput = document.getElementById('payment_method_id');
+            if (paymentMethodIdInput) {
+                paymentMethodIdInput.value = savedId;
+            }
+        }
         
         if (paymentMethod === 'stripe') {
             this.stripeSection.classList.remove('hidden');
@@ -101,13 +135,21 @@ export class StripePayment {
                 </svg>
                 Pay $${this.total.toFixed(2)}
             `;
-        } else {
+        } else if (paymentMethod === 'saved') {
             this.stripeSection.classList.add('hidden');
             this.buttonText.innerHTML = `
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                 </svg>
-                Place Order (COD)
+                Pay with Saved Card $${this.total.toFixed(2)}
+            `;
+        } else if (paymentMethod === 'cash') {
+            this.stripeSection.classList.add('hidden');
+            this.buttonText.innerHTML = `
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                Place Order (Cash on Delivery)
             `;
         }
     }

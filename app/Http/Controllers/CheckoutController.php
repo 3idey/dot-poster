@@ -24,15 +24,19 @@ class CheckoutController extends Controller
         $user = $request->user();
         $items = $user->cartItems()->with('product')->get();
         $total = $items->sum(fn ($i) => $i->quantity * $i->product->price);
+        $savedPaymentMethods = $user->savedPaymentMethods()->active()->get();
 
-        return view('checkout.index', compact('items', 'total', 'user'));
+        return view('checkout.index', compact('items', 'total', 'user', 'savedPaymentMethods'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'payment_method' => 'required|in:cash,stripe',
-            'payment_method_id' => 'nullable|string', // Stripe payment method ID
+            'payment_method' => 'required|in:cash,stripe,saved',
+            'payment_method_id' => 'nullable|string', // Stripe payment method ID or saved payment method ID
+            'save_payment_method' => 'nullable|boolean',
+            'payment_nickname' => 'nullable|string|max:255',
+            'shipping_address' => 'required|string|max:500',
         ]);
 
         $user = auth()->user();
@@ -41,19 +45,29 @@ class CheckoutController extends Controller
 
         $total = $items->sum(fn ($i) => $i->quantity * $i->product->price);
 
-        DB::transaction(function () use ($user, $items, $validated, $total) {
+        DB::transaction(function () use ($user, $items, $validated, $total, $request) {
             $order = Order::create([
                 'user_id' => $user->id,
                 'total_amount' => $total,
                 'status' => 'pending',
-                'shipping_address' => $user->shipping_address ?? request()->shipping_address,
-                'payment_method' => $validated['payment_method'],
+                'shipping_address' => $validated['shipping_address'],
+                'payment_method' => $validated['payment_method'] === 'saved' ? 'stripe' : $validated['payment_method'],
                 'payment_status' => $validated['payment_method'] === 'cash' ? 'pending' : 'unpaid',
             ]);
 
-            // Handle Stripe payment
-            if ($validated['payment_method'] === 'stripe') {
-                $this->processStripePayment($order, $validated['payment_method_id']);
+            // Handle Stripe payment (new or saved)
+            if ($validated['payment_method'] === 'stripe' || $validated['payment_method'] === 'saved') {
+                if ($validated['payment_method'] === 'saved') {
+                    $savedPaymentMethod = $user->savedPaymentMethods()->findOrFail($validated['payment_method_id']);
+                    $this->processStripePayment($order, $savedPaymentMethod->provider_payment_method_id);
+                } else {
+                    $this->processStripePayment($order, $validated['payment_method_id']);
+                    
+                    // Save payment method if requested
+                    if ($validated['save_payment_method'] ?? false) {
+                        $this->savePaymentMethod($user, $validated['payment_method_id'], $validated['payment_nickname'] ?? null);
+                    }
+                }
             }
 
             foreach ($items as $i) {
@@ -105,6 +119,51 @@ class CheckoutController extends Controller
             }
         } catch (\Exception $e) {
             throw new \Exception('Payment failed: '.$e->getMessage());
+        }
+    }
+
+    private function savePaymentMethod($user, $stripePaymentMethodId, $nickname = null)
+    {
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        try {
+            // Retrieve payment method details from Stripe
+            $paymentMethod = \Stripe\PaymentMethod::retrieve($stripePaymentMethodId);
+            
+            if ($paymentMethod->type === 'card') {
+                $card = $paymentMethod->card;
+                
+                // Check if this payment method already exists
+                $existing = $user->savedPaymentMethods()
+                    ->where('provider_payment_method_id', $stripePaymentMethodId)
+                    ->first();
+                
+                if (!$existing) {
+                    // Set other payment methods as non-default if this is the first one
+                    $isFirstPaymentMethod = $user->savedPaymentMethods()->count() === 0;
+                    
+                    if ($isFirstPaymentMethod) {
+                        // This will be the default
+                    } else {
+                        // If user wants this as default, unset others
+                        $user->savedPaymentMethods()->update(['is_default' => false]);
+                    }
+                    
+                    $user->savedPaymentMethods()->create([
+                        'type' => 'stripe',
+                        'provider_payment_method_id' => $stripePaymentMethodId,
+                        'last_four' => $card->last4,
+                        'brand' => $card->brand,
+                        'exp_month' => $card->exp_month,
+                        'exp_year' => $card->exp_year,
+                        'nickname' => $nickname,
+                        'is_default' => $isFirstPaymentMethod,
+                    ]);
+                }
+            }
+        } catch (\Exception $e) {
+            // Log error but don't fail the order
+            \Log::error('Failed to save payment method: ' . $e->getMessage());
         }
     }
 }

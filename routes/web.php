@@ -9,6 +9,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SavedPaymentMethodController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
@@ -62,4 +63,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::delete('/wishlist', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+
+    // Saved Payment Methods
+    Route::get('/profile/saved-payment-methods', [SavedPaymentMethodController::class, 'index'])->name('profile.saved-payment-methods.index');
+    Route::put('/profile/saved-payment-methods/{savedPaymentMethod}', [SavedPaymentMethodController::class, 'update'])->name('profile.saved-payment-methods.update');
+    Route::delete('/profile/saved-payment-methods/{savedPaymentMethod}', [SavedPaymentMethodController::class, 'destroy'])->name('profile.saved-payment-methods.destroy');
+    Route::post('/profile/saved-payment-methods/{savedPaymentMethod}/set-default', [SavedPaymentMethodController::class, 'setDefault'])->name('profile.saved-payment-methods.set-default');
 });
