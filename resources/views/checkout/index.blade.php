@@ -38,12 +38,12 @@
             <div class="mb-8">
                 <h3 class="text-xl font-semibold mb-4 text-white">Choose Payment Method</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="payment_method_radio" value="cash" class="sr-only peer" checked>
-                        <div class="bg-gray-800 border-2 border-gray-700 rounded-xl p-6 transition-all peer-checked:border-emerald-500 peer-checked:bg-emerald-900/20 hover:border-gray-600">
+                    <label class="relative cursor-pointer payment-method-label" data-payment="cash">
+                        <input type="radio" name="payment_method_radio" value="cash" class="sr-only" checked>
+                        <div class="bg-gray-800 border-2 border-emerald-500 bg-emerald-900/20 rounded-xl p-6 transition-all hover:border-gray-600 payment-method-card">
                             <div class="flex items-center space-x-3">
-                                <div class="w-5 h-5 rounded-full border-2 border-gray-400 peer-checked:border-emerald-500 peer-checked:bg-emerald-500 relative">
-                                    <div class="absolute inset-0 rounded-full bg-emerald-500 scale-0 peer-checked:scale-50 transition-transform"></div>
+                                <div class="w-5 h-5 rounded-full border-2 border-emerald-500 bg-emerald-500 relative payment-radio">
+                                    <div class="absolute inset-1 rounded-full bg-white scale-100 transition-transform"></div>
                                 </div>
                                 <div>
                                     <div class="font-semibold text-white">Cash on Delivery</div>
@@ -53,12 +53,12 @@
                         </div>
                     </label>
                     
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="payment_method_radio" value="stripe" class="sr-only peer">
-                        <div class="bg-gray-800 border-2 border-gray-700 rounded-xl p-6 transition-all peer-checked:border-emerald-500 peer-checked:bg-emerald-900/20 hover:border-gray-600">
+                    <label class="relative cursor-pointer payment-method-label" data-payment="stripe">
+                        <input type="radio" name="payment_method_radio" value="stripe" class="sr-only">
+                        <div class="bg-gray-800 border-2 border-gray-700 rounded-xl p-6 transition-all hover:border-gray-600 payment-method-card">
                             <div class="flex items-center space-x-3">
-                                <div class="w-5 h-5 rounded-full border-2 border-gray-400 peer-checked:border-emerald-500 peer-checked:bg-emerald-500 relative">
-                                    <div class="absolute inset-0 rounded-full bg-emerald-500 scale-0 peer-checked:scale-50 transition-transform"></div>
+                                <div class="w-5 h-5 rounded-full border-2 border-gray-400 relative payment-radio">
+                                    <div class="absolute inset-1 rounded-full bg-white scale-0 transition-transform"></div>
                                 </div>
                                 <div>
                                     <div class="font-semibold text-white">Credit/Debit Card</div>
@@ -91,32 +91,61 @@
 
             <!-- Stripe Card Element -->
             <div id="stripe-section" class="hidden mb-6">
-                <div class="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-xl p-6 shadow-lg">
-                    <div class="flex items-center mb-4">
-                        <svg class="w-6 h-6 text-emerald-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                        </svg>
-                        <h4 class="text-lg font-semibold text-white">Card Information</h4>
-                        <div class="ml-auto flex space-x-2">
-                            <img src="https://js.stripe.com/v3/fingerprinted/img/visa-729c05c240c4.svg" alt="Visa" class="h-6">
-                            <img src="https://js.stripe.com/v3/fingerprinted/img/mastercard-4d8844094130.svg" alt="Mastercard" class="h-6">
-                            <img src="https://js.stripe.com/v3/fingerprinted/img/amex-a49b82f46c5c.svg" alt="Amex" class="h-6">
+                <div class="bg-gradient-to-br from-gray-800 via-gray-850 to-gray-900 border border-gray-700 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+                    <!-- Background decoration -->
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/10 to-blue-500/10 rounded-full blur-3xl"></div>
+                    <div class="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-purple-500/10 to-emerald-500/10 rounded-full blur-2xl"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold text-white">Card Information</h4>
+                                    <p class="text-sm text-gray-400">Enter your payment details securely</p>
+                                </div>
+                            </div>
+                            <div class="flex space-x-3 opacity-80">
+                                <div class="w-10 h-6 bg-gradient-to-r from-blue-600 to-blue-700 rounded flex items-center justify-center">
+                                    <span class="text-white text-xs font-bold">VISA</span>
+                                </div>
+                                <div class="w-10 h-6 bg-gradient-to-r from-red-500 to-orange-500 rounded flex items-center justify-center">
+                                    <span class="text-white text-xs font-bold">MC</span>
+                                </div>
+                                <div class="w-10 h-6 bg-gradient-to-r from-blue-800 to-blue-900 rounded flex items-center justify-center">
+                                    <span class="text-white text-xs font-bold">AMEX</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-lg p-4 border-2 border-gray-300 focus-within:border-emerald-500 transition-colors">
-                        <div id="card-element" class="min-h-[40px]">
-                            <!-- Stripe Elements will create form elements here -->
+                        
+                        <div class="bg-white/95 backdrop-blur-sm rounded-xl p-5 border border-gray-200 shadow-inner focus-within:ring-2 focus-within:ring-emerald-500/50 focus-within:border-emerald-400 transition-all duration-300">
+                            <div id="card-element" class="min-h-[45px] text-gray-800">
+                                <!-- Stripe Elements will create form elements here -->
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div id="card-errors" role="alert" class="text-red-400 text-sm mt-3 min-h-[20px]"></div>
-                    
-                    <div class="mt-4 flex items-center text-sm text-gray-400">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
-                        </svg>
-                        Your payment information is secure and encrypted
+                        
+                        <div id="card-errors" role="alert" class="text-red-400 text-sm mt-4 min-h-[20px] font-medium"></div>
+                        
+                        <div class="mt-6 flex items-center justify-between">
+                            <div class="flex items-center text-sm text-gray-400">
+                                <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span>256-bit SSL encryption</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-400">
+                                <span class="mr-2">Powered by</span>
+                                <div class="px-3 py-1 bg-indigo-500/20 text-indigo-400 rounded-full text-xs font-semibold">
+                                    Stripe
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

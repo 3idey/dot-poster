@@ -4,6 +4,8 @@ import { MobileSidebar } from './modules/features/mobileSidebar.js';
 import { ImagePreview } from './modules/features/imagePreview.js';
 import { StarRating } from './modules/features/starRating.js';
 import { Newsletter } from './modules/features/newsletter.js';
+import { Wishlist } from './modules/features/wishlist.js';
+import { StripePayment } from './modules/features/stripePayment.js';
 
 // Initialize when DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {

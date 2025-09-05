@@ -16,9 +16,10 @@
         </thead>
         <tbody>
             @foreach ($products as $product)
+            @php $img = $product->image ? asset('storage/' . $product->image) : ($product->images->first() ? $product->images->first()->image_url : asset('images/placeholder.svg')); @endphp
                 <tr class="border-b">
                     <td class="p-3">{{ $product->id }}</td>
-                    <td class="p-3"><img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-24 h-24 object-cover"></td>
+                    <td class="p-3"><img src="{{ $img }}" alt="{{ $product->name }}" class="w-24 h-24 object-cover rounded-xl"></td>
                     <td class="p-3">{{ $product->name }}</td>
                     <td class="p-3">${{ $product->price }}</td>
                     <td class="p-3">{{ $product->stock }}</td>

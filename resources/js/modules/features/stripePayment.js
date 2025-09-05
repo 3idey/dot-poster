@@ -45,12 +45,48 @@ export class StripePayment {
     }
 
     setupPaymentMethodHandlers() {
-        const paymentRadios = document.querySelectorAll('input[name="payment_method_radio"]');
+        const paymentLabels = document.querySelectorAll('.payment-method-label');
         
-        paymentRadios.forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                this.handlePaymentMethodChange(e.target.value);
+        paymentLabels.forEach(label => {
+            label.addEventListener('click', (e) => {
+                const paymentMethod = label.dataset.payment;
+                const radio = label.querySelector('input[type="radio"]');
+                
+                // Update radio selection
+                document.querySelectorAll('input[name="payment_method_radio"]').forEach(r => r.checked = false);
+                radio.checked = true;
+                
+                // Update visual state
+                this.updatePaymentMethodVisuals(paymentMethod);
+                this.handlePaymentMethodChange(paymentMethod);
             });
+        });
+    }
+
+    updatePaymentMethodVisuals(selectedMethod) {
+        const labels = document.querySelectorAll('.payment-method-label');
+        
+        labels.forEach(label => {
+            const card = label.querySelector('.payment-method-card');
+            const radio = label.querySelector('.payment-radio');
+            const dot = radio.querySelector('div');
+            const isSelected = label.dataset.payment === selectedMethod;
+            
+            if (isSelected) {
+                card.classList.remove('border-gray-700');
+                card.classList.add('border-emerald-500', 'bg-emerald-900/20');
+                radio.classList.remove('border-gray-400');
+                radio.classList.add('border-emerald-500', 'bg-emerald-500');
+                dot.classList.remove('scale-0');
+                dot.classList.add('scale-100');
+            } else {
+                card.classList.remove('border-emerald-500', 'bg-emerald-900/20');
+                card.classList.add('border-gray-700');
+                radio.classList.remove('border-emerald-500', 'bg-emerald-500');
+                radio.classList.add('border-gray-400');
+                dot.classList.remove('scale-100');
+                dot.classList.add('scale-0');
+            }
         });
     }
 
@@ -59,10 +95,20 @@ export class StripePayment {
         
         if (paymentMethod === 'stripe') {
             this.stripeSection.classList.remove('hidden');
-            this.buttonText.textContent = `Pay $${this.total.toFixed(2)}`;
+            this.buttonText.innerHTML = `
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                </svg>
+                Pay $${this.total.toFixed(2)}
+            `;
         } else {
             this.stripeSection.classList.add('hidden');
-            this.buttonText.textContent = 'Place Order (COD)';
+            this.buttonText.innerHTML = `
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+                Place Order (COD)
+            `;
         }
     }
 

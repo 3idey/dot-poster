@@ -13,11 +13,17 @@ export class StarRating {
     init() {
         if (this.stars.length === 0) return;
 
-        // Add event listeners to stars
+        // Add event listeners to stars and their parent labels
         this.stars.forEach((star, index) => {
-            star.addEventListener('mouseenter', () => this.highlightStars(index + 1));
-            star.addEventListener('mouseleave', () => this.resetStars());
-            star.addEventListener('click', () => this.selectRating(index + 1));
+            const label = star.closest('label');
+            const target = label || star;
+            
+            target.addEventListener('mouseenter', () => this.highlightStars(index + 1));
+            target.addEventListener('mouseleave', () => this.resetStars());
+            target.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.selectRating(index + 1);
+            });
         });
 
         // Add initialization marker
