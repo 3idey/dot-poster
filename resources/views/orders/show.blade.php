@@ -1,7 +1,7 @@
 <x-header title="Your Order" />
 
 <x-layout>
-    <h1 class="text-2xl font-semibold mb-4">Order #{{ $order->id }}</h1>
+    <h1 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Order #{{ $order->id }}</h1>
 
     <div class="grid md:grid-cols-2 gap-6">
         <div class="bg-gray-900 p-4 rounded-xl">

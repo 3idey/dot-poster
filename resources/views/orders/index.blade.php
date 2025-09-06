@@ -1,7 +1,7 @@
 <x-header title="Orders" />
 
 <x-layout>
-    <h1 class="text-2xl font-semibold mb-6">My Orders</h1>
+    <h1 class="text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-100">My Orders</h1>
 
     @if (session('success'))
         <div class="mb-4 rounded bg-green-900/40 border border-green-600 px-4 py-2">

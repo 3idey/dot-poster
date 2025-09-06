@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
@@ -8,4 +10,95 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* Dark mode styles */
+@layer base {
+    :root {
+        --color-bg: #ffffff;
+        --color-text: #111827;
+        --color-primary: #10b981;
+        --color-secondary: #6b7280;
+        --color-border: #e5e7eb;
+    }
+
+    .dark {
+        --color-bg: #111827;
+        --color-text: #f3f4f6;
+        --color-primary: #10b981;
+        --color-secondary: #9ca3af;
+        --color-border: #374151;
+    }
+
+    body {
+        @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200;
+    }
+
+    /* Form elements */
+    input,
+    select,
+    textarea,
+    button {
+        @apply bg-white text-gray-900 border-gray-300 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600;
+    }
+
+    /* Tables */
+    table {
+        @apply w-full border-collapse;
+    }
+
+    th,
+    td {
+        @apply border border-gray-200 dark:border-gray-700 p-3;
+    }
+
+    th {
+        @apply bg-gray-100 dark:bg-gray-800 text-left;
+    }
+
+    /* Cards */
+    .card {
+        @apply bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700;
+    }
+
+    /* Buttons */
+    .btn-primary {
+        @apply bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    }
+
+    .btn-secondary {
+        @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200;
+    }
+
+    /* Navigation */
+    .nav-link {
+        @apply text-gray-700 hover:text-emerald-600 dark:text-gray-300 dark:hover:text-emerald-400 transition-colors duration-200;
+    }
+
+    /* Alerts */
+    .alert {
+        @apply p-4 rounded-lg mb-4;
+    }
+
+    .alert-success {
+        @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+    }
+
+    .alert-error {
+        @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
+    }
+
+    /* Custom scrollbar for dark mode */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-gray-100 dark:bg-gray-800;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-gray-300 dark:bg-gray-600 rounded-full hover:bg-gray-400 dark:hover:bg-gray-500;
+    }
 }

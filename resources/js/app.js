@@ -6,8 +6,12 @@ import { StarRating } from './modules/features/starRating.js';
 import { Wishlist } from './modules/features/wishlist.js';
 import { StripePayment } from './modules/features/stripePayment.js';
 import { SavedPaymentMethods } from './modules/features/savedPaymentMethods.js';
+import { DarkMode } from './modules/features/darkMode.js';
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize Dark Mode
+    new DarkMode();
+
     // Initialize Image Uploader if the required elements exist
     if (document.getElementById('upload-area') && document.getElementById('image')) {
         console.log('Initializing ImageUploader...');

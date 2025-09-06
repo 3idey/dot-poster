@@ -13,13 +13,16 @@ use App\Http\Controllers\SavedPaymentMethodController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => to_route('products.index'))->name('home');
+Route::get('/', [ProductController::class, 'index'])->name('home');
 Route::get('/about', function () {
     return view('about');
 });
 Route::get('/contact', function () {
     return view('contact');
 });
+Route::get('/', function () {
+    return view('home');
+})->name('home');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 // Newsletter routes
