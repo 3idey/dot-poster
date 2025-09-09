@@ -8,6 +8,7 @@ export class StarRating {
         this.ratingInputs = document.querySelectorAll('input[name="rating"]');
         this.currentRating = 0;
         this.init();
+        this.darkMode = document.documentElement.classList.contains('dark');
     }
 
     init() {
@@ -17,7 +18,7 @@ export class StarRating {
         this.stars.forEach((star, index) => {
             const label = star.closest('label');
             const target = label || star;
-            
+
             target.addEventListener('mouseenter', () => this.highlightStars(index + 1));
             target.addEventListener('mouseleave', () => this.resetStars());
             target.addEventListener('click', (e) => {
@@ -49,7 +50,7 @@ export class StarRating {
 
     selectRating(rating) {
         this.currentRating = rating;
-        
+
         // Update the corresponding radio input
         const radioInput = document.getElementById(`star${rating}`);
         if (radioInput) {
@@ -58,10 +59,10 @@ export class StarRating {
 
         // Update visual state
         this.highlightStars(rating);
-        
+
         // Dispatch custom event
-        const event = new CustomEvent('rating:selected', { 
-            detail: { rating: rating } 
+        const event = new CustomEvent('rating:selected', {
+            detail: { rating: rating }
         });
         document.dispatchEvent(event);
     }
@@ -73,9 +74,9 @@ export class StarRating {
             star.removeEventListener('mouseleave', this.resetStars);
             star.removeEventListener('click', this.selectRating);
         });
-        
+
         document.body.classList.remove('star-rating-initialized');
-        
+
         // Dispatch custom event
         const event = new CustomEvent('star-rating:destroyed');
         document.dispatchEvent(event);

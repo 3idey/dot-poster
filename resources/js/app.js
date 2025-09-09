@@ -45,8 +45,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Initialize Stripe Payment if on checkout page
-    if (document.getElementById('payment-form')) {
-        new StripePayment();
+    if (document.getElementById('checkout-form')) {
+        const checkoutForm = document.getElementById('checkout-form');
+        const stripeKey = checkoutForm.dataset.stripeKey;
+        const total = parseFloat(checkoutForm.dataset.total) || 0;
+        
+        new StripePayment({
+            stripeKey: stripeKey,
+            total: total
+        });
     }
 
     // Initialize Star Rating if rating elements exist

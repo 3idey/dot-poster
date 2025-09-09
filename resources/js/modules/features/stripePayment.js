@@ -25,6 +25,8 @@ export class StripePayment {
         this.initializeStripe();
         this.setupPaymentMethodHandlers();
         this.setupFormSubmission();
+        this.initializeVisualState();
+        this.setupThemeChangeListener();
     }
 
     initializeStripe() {
@@ -42,6 +44,39 @@ export class StripePayment {
         } catch (error) {
             console.error('Stripe initialization error:', error);
         }
+    }
+
+    initializeVisualState() {
+        // Set initial visual state based on the default checked radio button
+        const checkedRadio = document.querySelector('input[name="payment_method_radio"]:checked');
+        if (checkedRadio) {
+            const label = checkedRadio.closest('.payment-method-label');
+            const paymentMethod = label.dataset.payment;
+            const savedId = label.dataset.savedId;
+            
+            const visualMethod = paymentMethod === 'saved' ? `saved_${savedId}` : paymentMethod;
+            this.updatePaymentMethodVisuals(visualMethod);
+            this.handlePaymentMethodChange(paymentMethod, savedId);
+        }
+    }
+
+    setupThemeChangeListener() {
+        // Listen for theme changes and update visual states
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    // Re-initialize visual state when theme changes
+                    setTimeout(() => {
+                        this.initializeVisualState();
+                    }, 10);
+                }
+            });
+        });
+        
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
     }
 
     setupPaymentMethodHandlers() {
@@ -68,8 +103,9 @@ export class StripePayment {
                     }
                 }
                 
-                // Update visual state
-                this.updatePaymentMethodVisuals(paymentMethod);
+                // Update visual state - pass the specific selection context for saved methods
+                const visualMethod = paymentMethod === 'saved' ? `saved_${savedId}` : paymentMethod;
+                this.updatePaymentMethodVisuals(visualMethod);
                 this.handlePaymentMethodChange(paymentMethod, savedId);
             });
         });
@@ -96,22 +132,33 @@ export class StripePayment {
             const card = label.querySelector('.payment-method-card');
             const radio = label.querySelector('.payment-radio');
             const dot = radio.querySelector('div');
-            const isSelected = label.dataset.payment === selectedMethod;
+            const paymentMethod = label.dataset.payment;
+            const savedId = label.dataset.savedId;
+            
+            // Check if this label should be selected
+            let isSelected = false;
+            if (selectedMethod.startsWith('saved_')) {
+                // For saved methods, match the specific saved ID
+                const targetSavedId = selectedMethod.replace('saved_', '');
+                isSelected = (paymentMethod === 'saved' && savedId === targetSavedId);
+            } else {
+                // For regular payment methods
+                isSelected = (paymentMethod === selectedMethod);
+            }
+            
+            // Remove all payment state classes first
+            card.classList.remove('payment-method-selected', 'payment-method-unselected');
+            radio.classList.remove('payment-radio-selected', 'payment-radio-unselected');
+            dot.classList.remove('payment-dot-selected', 'payment-dot-unselected');
             
             if (isSelected) {
-                card.classList.remove('border-gray-700');
-                card.classList.add('border-emerald-500', 'bg-emerald-900/20');
-                radio.classList.remove('border-gray-400');
-                radio.classList.add('border-emerald-500', 'bg-emerald-500');
-                dot.classList.remove('scale-0');
-                dot.classList.add('scale-100');
+                card.classList.add('payment-method-selected');
+                radio.classList.add('payment-radio-selected');
+                dot.classList.add('payment-dot-selected');
             } else {
-                card.classList.remove('border-emerald-500', 'bg-emerald-900/20');
-                card.classList.add('border-gray-700');
-                radio.classList.remove('border-emerald-500', 'bg-emerald-500');
-                radio.classList.add('border-gray-400');
-                dot.classList.remove('scale-100');
-                dot.classList.add('scale-0');
+                card.classList.add('payment-method-unselected');
+                radio.classList.add('payment-radio-unselected');
+                dot.classList.add('payment-dot-unselected');
             }
         });
     }
@@ -213,17 +260,3 @@ export class StripePayment {
         }
     }
 }
-
-// Auto-initialize if checkout form exists
-document.addEventListener('DOMContentLoaded', () => {
-    const checkoutForm = document.getElementById('checkout-form');
-    if (checkoutForm) {
-        const stripeKey = checkoutForm.dataset.stripeKey;
-        const total = parseFloat(checkoutForm.dataset.total) || 0;
-        
-        new StripePayment({
-            stripeKey: stripeKey,
-            total: total
-        });
-    }
-});

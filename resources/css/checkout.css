@@ -1,0 +1,48 @@
+/* Checkout Payment Method Styles */
+.payment-method-selected {
+    @apply border-emerald-500 bg-emerald-50 hover:bg-emerald-100;
+}
+
+.dark .payment-method-selected {
+    @apply border-emerald-400 bg-emerald-900/20 hover:bg-emerald-900/30;
+}
+
+.payment-method-unselected {
+    @apply border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300;
+}
+
+.dark .payment-method-unselected {
+    @apply border-gray-700 bg-gray-800 hover:bg-gray-700 hover:border-gray-600;
+}
+
+.payment-radio-selected {
+    @apply border-emerald-500 bg-emerald-500;
+}
+
+.dark .payment-radio-selected {
+    @apply border-emerald-400 bg-emerald-400;
+}
+
+.payment-radio-unselected {
+    @apply border-gray-300 bg-white;
+}
+
+.dark .payment-radio-unselected {
+    @apply border-gray-600 bg-gray-800;
+}
+
+.payment-dot-selected {
+    @apply scale-100 bg-white;
+}
+
+.dark .payment-dot-selected {
+    @apply scale-100 bg-gray-800;
+}
+
+.payment-dot-unselected {
+    @apply scale-0 bg-gray-300;
+}
+
+.dark .payment-dot-unselected {
+    @apply scale-0 bg-gray-600;
+}
