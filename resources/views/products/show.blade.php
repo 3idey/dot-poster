@@ -206,9 +206,9 @@
 
     <!-- Reviews Section -->
     <div class="mt-16">
-        <div class="bg-gray-800 dark:bg-gray-900 border border-gray-700 dark:border-gray-800 rounded-2xl p-8">
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-8">
             <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-white">Customer Reviews</h2>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Customer Reviews</h2>
                 <div class="flex items-center space-x-2">
                     <div class="flex text-yellow-400">
                         @for ($i = 1; $i <= 5; $i++)
@@ -219,7 +219,7 @@
                             </svg>
                         @endfor
                     </div>
-                    <span class="text-gray-300">
+                    <span class="text-gray-600 dark:text-gray-300">
                         @if($product->reviews_avg_rating)
                             {{ number_format($product->reviews_avg_rating, 1) }}
                         @else
@@ -234,12 +234,12 @@
                 <div class="space-y-4 mb-8">
                     @foreach ($product->reviews->take(3) as $review)
                         <div
-                            class="bg-gray-700 dark:bg-gray-800 rounded-xl p-4 border border-gray-600 dark:border-gray-700">
+                            class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600">
                             <div class="flex items-center justify-between mb-2">
                                 <div class="flex items-center space-x-3">
                                     <img src="{{ $review->user->avatar_url }}" alt="User Avatar"
                                         class="w-8 h-8 rounded-full">
-                                    <span class="text-white font-medium">{{ $review->user->name }}</span>
+                                    <span class="text-gray-900 dark:text-gray-100 font-medium">{{ $review->user->name }}</span>
                                 </div>
                                 <div class="flex text-yellow-400">
                                     @for ($i = 1; $i <= 5; $i++)
@@ -251,7 +251,7 @@
                                     @endfor
                                 </div>
                             </div>
-                            <p class="text-gray-300 dark:text-gray-200">{{ $review->comment }}</p>
+                            <p class="text-gray-700 dark:text-gray-200">{{ $review->comment }}</p>
                             <div class="text-xs text-gray-500 dark:text-gray-400 mt-2">
                                 {{ $review->created_at->diffForHumans() }}</div>
                         </div>
@@ -265,7 +265,7 @@
                             d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.013 8.013 0 01-7-4c0-4.418 3.582-8 8-8s8 3.582 8 8z">
                         </path>
                     </svg>
-                    <p class="text-gray-400 dark:text-gray-300">No reviews yet. Be the first to review this product!
+                    <p class="text-gray-600 dark:text-gray-300">No reviews yet. Be the first to review this product!
                     </p>
                 </div>
             @endif
@@ -279,12 +279,12 @@
                 @endphp
 
                 @if (!$userReview)
-                    <div class="border-t border-gray-600 pt-6">
-                        <h3 class="text-lg font-semibold text-white mb-4">Write a Review</h3>
+                    <div class="border-t border-gray-200 dark:border-gray-600 pt-6">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Write a Review</h3>
                         <form action="{{ route('reviews.store', $product) }}" method="POST" class="space-y-4">
                             @csrf
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Rating</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rating</label>
                                 <div class="flex space-x-1">
                                     @for ($i = 1; $i <= 5; $i++)
                                         <input type="radio" name="rating" value="{{ $i }}"
@@ -300,9 +300,9 @@
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Your Review</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your Review</label>
                                 <textarea name="comment" rows="4"
-                                    class="w-full bg-gray-700 dark:bg-gray-800 border border-gray-600 dark:border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-400 dark:placeholder-gray-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
+                                    class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
                                     placeholder="Share your thoughts about this product..."></textarea>
                             </div>
                             <button type="submit"
@@ -312,10 +312,10 @@
                         </form>
                     </div>
                 @else
-                    <div class="border-t border-gray-600 pt-6">
+                    <div class="border-t border-gray-200 dark:border-gray-600 pt-6">
                         <div
-                            class="bg-gray-700 dark:bg-gray-800 rounded-lg p-4 border border-gray-600 dark:border-gray-700">
-                            <h3 class="text-lg font-semibold text-white mb-2">Your Review</h3>
+                            class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Your Review</h3>
                             <div class="flex items-center space-x-2 mb-2">
                                 <div class="flex text-yellow-400">
                                     @for ($i = 1; $i <= 5; $i++)
@@ -326,10 +326,10 @@
                                         </svg>
                                     @endfor
                                 </div>
-                                <span class="text-gray-300 dark:text-gray-200">{{ $userReview->rating }}/5</span>
+                                <span class="text-gray-700 dark:text-gray-200">{{ $userReview->rating }}/5</span>
                             </div>
                             @if ($userReview->comment)
-                                <p class="text-gray-300 dark:text-gray-200">{{ $userReview->comment }}</p>
+                                <p class="text-gray-700 dark:text-gray-200">{{ $userReview->comment }}</p>
                             @endif
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">You have already reviewed this
                                 product.</p>
@@ -343,11 +343,11 @@
     <!-- Related Products -->
     @if ($relatedProducts && $relatedProducts->count() > 0)
         <div class="mt-16">
-            <h2 class="text-2xl font-bold text-white mb-8">You Might Also Like</h2>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-8">You Might Also Like</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach ($relatedProducts as $relatedProduct)
                     <div
-                        class="bg-gray-800 dark:bg-gray-900 border border-gray-700 dark:border-gray-800 rounded-2xl p-4 hover:shadow-xl dark:hover:shadow-emerald-800 transition-all duration-300 transform hover:scale-105">
+                        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 hover:shadow-xl dark:hover:shadow-emerald-800 transition-all duration-300 transform hover:scale-105">
                         <a href="{{ route('products.show', $relatedProduct->id) }}" class="block">
                             @php
                                 $relatedImage = $relatedProduct->image
@@ -359,9 +359,9 @@
                             <img src="{{ $relatedImage }}"
                                 class="w-full h-48 object-cover rounded-xl mb-3 dark:brightness-90"
                                 alt="{{ $relatedProduct->name }}" loading="lazy">
-                            <h3 class="text-white dark:text-gray-100 font-medium mb-2 line-clamp-2">{{ $relatedProduct->name }}</h3>
+                            <h3 class="text-gray-900 dark:text-gray-100 font-medium mb-2 line-clamp-2">{{ $relatedProduct->name }}</h3>
                             <div class="flex items-center justify-between">
-                                <div class="text-emerald-400 dark:text-emerald-300 font-bold">
+                                <div class="text-emerald-600 dark:text-emerald-400 font-bold">
                                     ${{ number_format($relatedProduct->price, 2) }}
                                 </div>
                                 @if($relatedProduct->reviews_avg_rating)
@@ -369,7 +369,7 @@
                                         <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
                                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
-                                        <span class="text-xs text-gray-300 ml-1">{{ number_format($relatedProduct->reviews_avg_rating, 1) }}</span>
+                                        <span class="text-xs text-gray-600 dark:text-gray-300 ml-1">{{ number_format($relatedProduct->reviews_avg_rating, 1) }}</span>
                                     </div>
                                 @endif
                             </div>
