@@ -37,7 +37,7 @@
                             @endif
                         </x-sidelink>
                     </li>
-
+                    <li><x-sidelink link="{{ route('products.recently-viewed') }}">Recently Viewed</x-sidelink></li>
                     {{-- Normal user links --}}
                     <li><x-sidelink link="{{ route('profile.show') }}">Profile</x-sidelink></li>
                     <li><x-sidelink link="{{ route('profile.saved-payment-methods.index') }}">Payment Methods</x-sidelink></li>
@@ -220,6 +220,9 @@
                                     </span>
                                 @endif
                             </x-sidelink>
+                        </li>
+                        <li>
+                            <x-sidelink link="{{ route('products.recently-viewed') }}">Recently Viewed</x-sidelink>
                         </li>
                         <li><x-sidelink link="{{ route('profile.show') }}">Profile</x-sidelink></li>
                         <li><x-sidelink link="{{ route('profile.saved-payment-methods.index') }}">Payment Methods</x-sidelink>

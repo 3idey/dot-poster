@@ -10,6 +10,7 @@ use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SavedPaymentMethodController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,12 +29,15 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 // Newsletter routes
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::post('/newsletter/unsubscribe', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
+
 Route::get('/login', [LoginController::class, 'create'])->middleware('guest')->name('login.create');
 Route::post('/login', [LoginController::class, 'store'])->middleware(['guest', 'throttle:5,1'])->name('login');
 Route::delete('/logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
 
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register.create');
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register');
+
+Route::get('/products/recently-viewed', [ProductController::class, 'recentlyViewed'])->name('products.recently-viewed');
 
 Route::resource('products', ProductController::class)->only(['index', 'show']);
 
@@ -52,15 +56,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 });
 
+// Public routes for all users
+
+// Protected routes that require authentication
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Reviews
-    Route::post('/products/{product}/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
-    Route::delete('/reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
-
+    Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
