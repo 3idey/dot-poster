@@ -4,6 +4,9 @@
     <div class="max-w-md mx-auto mt-20">
         <div class="bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl p-8">
             <div class="text-center mb-8">
+                <div class="flex justify-center mb-6">
+                    <x-text-logo size="xl" />
+                </div>
                 <h1 class="text-3xl font-bold text-white mb-2">Welcome Back</h1>
                 <p class="text-gray-400">Sign in to your account</p>
             </div>

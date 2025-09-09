@@ -1,11 +1,14 @@
-# Dot-Poster E-commerce Platform
+# .poster — E-commerce Platform
 
 A modern, full-featured e-commerce platform built with Laravel 12 for selling posters and artwork online. Features a beautiful, responsive design with professional UI/UX and comprehensive e-commerce functionality.
+
+This project is now branded as “.poster” and ships with a sleek text-based logo that adapts to dark/light modes, improved product image handling, and a robust “Recently Viewed” experience.
 
 ## ✨ Features
 
 ### **Customer Features**
 - **Product Catalog** - Browse posters with high-quality image galleries and interactive thumbnails
+- **Recently Viewed** - Quick access to the last viewed items at `/products/recently-viewed`
 - **Advanced Search & Filtering** - Search by name, category, price range with dynamic sorting options
 - **Smart Shopping Cart** - Modern cart interface with quantity management and real-time updates
 - **Wishlist System** - Save favorite products with visual indicators and easy management
@@ -52,6 +55,8 @@ A modern, full-featured e-commerce platform built with Laravel 12 for selling po
 
 ## Quick Start
 
+If you’ve previously worked with the project as “Dot-Poster”, just pull latest changes. Branding is now “.poster” and assets are managed via Vite.
+
 ### Prerequisites
 - PHP 8.2+
 - Composer
@@ -61,6 +66,11 @@ A modern, full-featured e-commerce platform built with Laravel 12 for selling po
 - Google OAuth credentials (for Google Sign-In)
 
 ### Installation
+
+Note: Ensure storage is linked so images load correctly:
+```bash
+php artisan storage:link
+```
 
 1. **Clone & Install Dependencies**
 ```bash
@@ -99,6 +109,11 @@ php artisan db:seed
 composer run dev
 ```
 This runs the Laravel server, queue worker, logs, and Vite concurrently.
+
+6. **Build Frontend Assets (on demand)**
+```bash
+npm run build
+```
 
 ## Project Structure
 
@@ -202,6 +217,51 @@ GOOGLE_CLIENT_SECRET=your_google_client_secret
 - Images accessible via `/storage/products/` URL with lazy loading
 - Frontend assets compiled with Vite for optimal performance
 - Responsive image handling with proper optimization
+
+### UI Components & Assets
+
+#### Text Logo Component
+**File:** `resources/views/components/text-logo.blade.php`
+
+Flexible component with multiple size options:
+```blade
+<x-text-logo size="sm" />   <!-- Small -->
+<x-text-logo size="base" /> <!-- Default -->
+<x-text-logo size="lg" />   <!-- Large -->
+<x-text-logo size="xl" />   <!-- Extra large with tagline -->
+```
+
+**Features:**
+- Gradient text (emerald to teal)
+- Animated dot with pulse/ping effects
+- Dark mode glow effect
+- Hover animations
+- Optional tagline for XL size
+
+#### Product Image Gallery
+**Files:**
+- `resources/js/product-show.js` - Interactive functionality
+- `resources/css/product-show.css` - Styling and animations
+
+**Features:**
+- Click main image to open full-screen modal
+- Thumbnail switching with visual feedback
+- Keyboard navigation (Escape to close)
+- Responsive design with hover effects
+
+#### Recently Viewed System
+**Route:** `/products/recently-viewed`
+**Controller:** `ProductController@recentlyViewed`
+
+**Session Logic:**
+- Stores last 5 viewed product IDs
+- Deduplicates entries
+- Most recent first ordering
+- Handles data validation and cleanup
+
+**Usage in views:**
+- Sidebar: "Recently Viewed" link (auth users only)
+- Accessible via `route('products.recently-viewed')`
 
 ## Development
 

@@ -4,9 +4,11 @@
         class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <!-- Hero Section -->
         <div class="text-center py-20">
-            <h1
-                class="text-5xl font-extrabold mb-6 bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent dark:from-emerald-300 dark:to-emerald-500 drop-shadow-lg">
-                Welcome to Dot-Poster
+            <div class="mb-8">
+                <x-text-logo size="xl" />
+            </div>
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+                Transform Your Space with Art
             </h1>
             <p class="text-xl text-gray-700 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
                 Discover amazing posters that transform your space. From vintage classics to modern art, find the

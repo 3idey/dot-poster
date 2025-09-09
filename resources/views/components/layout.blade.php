@@ -6,10 +6,8 @@
         <nav
             class="hidden lg:flex lg:flex-col lg:w-64 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 items-center py-8 space-y-6 fixed left-0 top-0 h-full shadow-xl dark:shadow-emerald-900 z-40 border-r border-gray-200 dark:border-gray-700">
             <!-- Logo -->
-            <a href="/" class="flex items-center space-x-3 px-4 mb-6">
-                <img src="{{ Vite::asset('resources/images/fulllogo.png') }}" alt="Dot Poster Logo"
-                    class="w-[55px] h-[55px] object-contain hover:scale-110 transition-transform duration-300 ease-in-out dark:brightness-90"
-                    loading="eager">
+            <a href="/" class="flex items-center justify-center px-4 mb-6">
+                <x-text-logo size="lg" />
             </a>
 
             <!-- Navigation Links -->
@@ -182,10 +180,8 @@
         <div class="p-4">
             <!-- Logo -->
             <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-                <a href="/" class="flex items-center space-x-2">
-                    <img src="{{ Vite::asset('resources/images/fulllogo.png') }}" alt="Dot Poster Logo"
-                        class="h-10 w-auto object-contain dark:brightness-90" loading="eager">
-                    <span class="text-xl font-bold text-gray-900 dark:text-gray-100">Dot Poster</span>
+                <a href="/" class="flex items-center">
+                    <x-text-logo size="base" />
                 </a>
                 <button id="close-mobile-sidebar"
                     class="text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100 focus:outline-none">

@@ -1,10 +1,13 @@
-<x-header title="About Us - Dot Poster" />
+<x-header title="About Us" />
 
 <x-layout>
     <div class="max-w-4xl mx-auto">
         <!-- Hero Section -->
         <div class="text-center mb-12">
-            <h1 class="text-5xl font-bold text-gray-800 dark:text-gray-100 mb-4">About Dot Poster</h1>
+            <div class="flex justify-center mb-8">
+                <x-text-logo size="xl" />
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4">About Us</h1>
             <p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">Transforming spaces with premium poster
                 art since 2024</p>
         </div>
@@ -14,7 +17,7 @@
             <div>
                 <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Our Story</h2>
                 <div class="space-y-4 text-gray-600 dark:text-gray-300 leading-relaxed">
-                    <p>Dot Poster was born from a simple belief: everyone deserves to live and work in spaces that
+                    <p>.poster was born from a simple belief: everyone deserves to live and work in spaces that
                         inspire them. What started as a passion project to curate beautiful, high-quality poster art has
                         evolved into a comprehensive marketplace connecting artists with art lovers worldwide.</p>
 

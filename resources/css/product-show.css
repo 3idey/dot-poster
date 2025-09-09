@@ -1,0 +1,41 @@
+/* Product show page specific styles */
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Image zoom cursor for main product image */
+.cursor-zoom-in {
+    cursor: zoom-in;
+}
+
+/* Smooth transitions for thumbnails */
+.product-thumbnail {
+    transition: all 0.2s ease-in-out;
+}
+
+.product-thumbnail:hover {
+    transform: scale(1.05);
+}
+
+/* Modal backdrop blur effect */
+#imageModal {
+    backdrop-filter: blur(4px);
+}
+
+/* Ensure modal is above all other content */
+#imageModal {
+    z-index: 9999;
+}

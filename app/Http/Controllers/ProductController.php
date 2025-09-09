@@ -9,6 +9,8 @@ class ProductController extends Controller
     public function index()
     {
         $query = Product::with(['images' => fn($q) => $q->orderByDesc('is_main')])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
             ->where('status', true);
 
         // Search functionality
